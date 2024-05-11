@@ -8,11 +8,14 @@ use custom_debug::DebugPlugin;
 fn main() {
     App::new()
         .add_plugins((
+            #[cfg(debug_assertions)]
             DefaultPlugins.set(WindowPlugin {
                 primary_window: None,
                 ..default()
             }),
             DebugPlugin,
+            #[cfg(not(debug_assertions))]
+            DefaultPlugins,
             FramepacePlugin,
             PanCamPlugin::default(),
         ))
