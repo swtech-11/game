@@ -18,7 +18,7 @@ pub struct GameLogicPlugin;
 
 impl Plugin for GameLogicPlugin {
     fn build(&self, app: &mut App) {
-        info!("Initializing GameLogicPlugin");
+        info!("Ini tializing GameLogicPlugin");
         app.add_systems(Update, move_creature);
     }
 }
