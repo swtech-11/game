@@ -17,7 +17,6 @@ mod debug;
 
 use bevy::prelude::*;
 use bevy_pancam::{PanCam, PanCamPlugin};
-use debug::RenderDebugPlugin;
 
 pub const CELL_SIZE: f32 = 10.0;
 
@@ -32,7 +31,10 @@ impl Plugin for RenderPlugin {
             .add_systems(Update, position_sync);
 
         #[cfg(feature = "debug")]
-        app.add_plugins(RenderDebugPlugin);
+        {
+            use debug::RenderDebugPlugin;
+            app.add_plugins(RenderDebugPlugin);
+        }
     }
 }
 
