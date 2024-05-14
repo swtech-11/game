@@ -44,6 +44,13 @@
       "args": ["--package", "game", "--bin", "game", "--features", "debug"],
       "problemMatcher": ["$rustc"],
       "label": "rust: debug"
+    },
+    {
+      "type": "cargo",
+      "command": "run",
+      "args": ["--package", "game", "--bin", "game"],
+      "problemMatcher": ["$rustc"],
+      "label": "rust game"
     }
   ]
 }
