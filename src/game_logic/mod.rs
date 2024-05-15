@@ -12,6 +12,9 @@ pub struct Fruit;
 pub struct Health(bool);
 
 #[derive(Component)]
+pub struct Nutrient(u8);
+
+#[derive(Component)]
 pub struct Position {
     pub x: u8,
     pub y: u8,
@@ -34,6 +37,7 @@ pub struct CreatureBundle {
     pub creature: Creature,
     pub health: Health,
     pub position: Position,
+    pub nutrient: Nutrient,
 }
 
 impl CreatureBundle {
@@ -42,6 +46,7 @@ impl CreatureBundle {
             creature: Creature,
             health: Health(true),
             position,
+            nutrient: Nutrient(0),
         }
     }
 }
@@ -51,6 +56,7 @@ pub struct FruitBundle {
     pub fruit: Fruit,
     pub health: Health,
     pub position: Position,
+    pub nutrient: Nutrient,
 }
 
 impl FruitBundle {
@@ -59,6 +65,7 @@ impl FruitBundle {
             fruit: Fruit,
             health: Health(true),
             position,
+            nutrient: Nutrient(1),
         }
     }
 }
@@ -105,6 +112,9 @@ fn move_single_creature(mut query: Query<&mut Position, With<Creature>>) {
         }
         if input_string == "s" && position.y > 0 {
             position.y -= 1;
+        };
+    }
+}
         }
         println!("Creature new location x: {}, y: {}", position.x, position.y);
     }
