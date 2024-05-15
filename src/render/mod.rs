@@ -1,4 +1,5 @@
 use crate::game_logic::Position;
+use log;
 mod debug;
 
 // MaterialMesh2dBundle {
@@ -24,7 +25,7 @@ pub struct RenderPlugin;
 
 impl Plugin for RenderPlugin {
     fn build(&self, app: &mut App) {
-        info!("Initializing RenderPlugin");
+        log::info!("Initializing RenderPlugin");
 
         app.add_plugins((PanCamPlugin::default(),))
             .add_systems(Startup, setup)

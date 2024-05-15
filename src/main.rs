@@ -1,10 +1,13 @@
 mod game_logic;
 mod render;
 use bevy::{input::InputPlugin, prelude::*};
+use env_logger;
 
 use game_logic::{CreatureBundle, FruitBundle, GameLogicPlugin, Position};
 
 fn main() {
+    env_logger::init();
+
     let mut app = App::new();
     app.add_plugins(GameLogicPlugin).add_systems(Startup, setup);
 

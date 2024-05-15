@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use log;
 
 use crate::game_logic::GRID_SIZE;
 
@@ -8,7 +9,7 @@ pub struct RenderDebugPlugin;
 
 impl Plugin for RenderDebugPlugin {
     fn build(&self, app: &mut App) {
-        info!("Initializing RenderDebugPlugin");
+        log::info!("Initializing RenderDebugPlugin");
         app.add_systems(Startup, config_gizmos)
             .add_systems(Update, draw_grid);
     }

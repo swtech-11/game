@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use log;
 
 pub const GRID_SIZE: u8 = 20;
 
@@ -24,7 +25,7 @@ pub struct GameLogicPlugin;
 
 impl Plugin for GameLogicPlugin {
     fn build(&self, app: &mut App) {
-        info!("Initializing GameLogicPlugin");
+        log::info!("Initializing GameLogicPlugin");
         #[cfg(feature = "render")]
         app.add_systems(Update, move_creature);
         #[cfg(not(feature = "render"))]
@@ -113,9 +114,12 @@ fn move_single_creature(mut query: Query<&mut Position, With<Creature>>) {
         if input_string == "s" && position.y > 0 {
             position.y -= 1;
         };
+
+        log::debug!("Creature new location x: {}, y: {}", position.x, position.y);
     }
 }
-        }
-        println!("Creature new location x: {}, y: {}", position.x, position.y);
+
+    }
+}
     }
 }
