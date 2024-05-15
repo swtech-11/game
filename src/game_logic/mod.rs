@@ -30,6 +30,7 @@ impl Plugin for GameLogicPlugin {
         app.add_systems(Update, move_creature);
         #[cfg(not(feature = "render"))]
         app.add_systems(Update, move_single_creature);
+        app.add_systems(Update, eat_fruit);
     }
 }
 
@@ -119,7 +120,24 @@ fn move_single_creature(mut query: Query<&mut Position, With<Creature>>) {
     }
 }
 
-    }
-}
+fn eat_fruit(
+    mut commands: Commands,
+    mut query: Query<(Entity, &Position, &Nutrient), With<Creature>>,
+    mut fruit_query: Query<(Entity, &Position, &Nutrient), With<Fruit>>,
+) {
+    for (creature_entity, creature_position, creature_nutrient) in query.iter_mut() {
+        for (fruit_entity, fruit_position, fruit_nutrient) in fruit_query.iter_mut() {
+            if creature_position.x == fruit_position.x && creature_position.y == fruit_position.y {
+                commands.entity(fruit_entity).despawn();
+                commands
+                    .entity(creature_entity)
+                    .insert(Nutrient(creature_nutrient.0 + fruit_nutrient.0));
+
+                log::debug!(
+                    "Creature ate fruit. Creature nutrient: {}",
+                    creature_nutrient.0 + fruit_nutrient.0
+                );
+            }
+        }
     }
 }
