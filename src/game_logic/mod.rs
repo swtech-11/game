@@ -78,19 +78,19 @@ fn move_creature(
     input: Res<ButtonInput<KeyCode>>,
 ) {
     for mut position in query.iter_mut() {
-        if input.pressed(KeyCode::ArrowRight) && position.x <= GRID_SIZE - 1 {
+        if input.just_pressed(KeyCode::ArrowRight) && position.x < GRID_SIZE - 1 {
             position.x += 1;
         }
-        if input.pressed(KeyCode::ArrowUp) && position.y <= GRID_SIZE - 1 {
+        if input.just_pressed(KeyCode::ArrowUp) && position.y < GRID_SIZE - 1 {
             position.y += 1;
         }
-        if input.pressed(KeyCode::ArrowLeft) && position.x > 0 {
+        if input.just_pressed(KeyCode::ArrowLeft) && position.x > 0 {
             position.x -= 1;
         }
-        if input.pressed(KeyCode::ArrowDown) && position.y > 0 {
+        if input.just_pressed(KeyCode::ArrowDown) && position.y > 0 {
             position.y -= 1;
         }
-        println!("Creature new location x: {}, y: {}", position.x, position.y);
+        log::debug!("Creature new location x: {}, y: {}", position.x, position.y);
     }
 }
 

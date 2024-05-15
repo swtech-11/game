@@ -57,6 +57,10 @@ fn create_render(
 
 fn position_sync(mut query: Query<(&Position, &mut Transform), Changed<Position>>) {
     for (position, mut transform) in query.iter_mut() {
-        transform.translation = Vec3::new(position.x as f32, position.y as f32, 0.0);
+        let mut final_position: (f32, f32) = (0.0, 0.0);
+        final_position.0 = position.x as f32 * CELL_SIZE + CELL_SIZE / 2.0;
+        final_position.1 = position.y as f32 * CELL_SIZE + CELL_SIZE / 2.0;
+
+        transform.translation = Vec3::new(final_position.0, final_position.1, 0.0);
     }
 }
