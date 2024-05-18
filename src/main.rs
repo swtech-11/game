@@ -1,6 +1,6 @@
 mod game_logic;
 mod render;
-use bevy::{input::InputPlugin, prelude::*};
+use bevy::prelude::*;
 use env_logger;
 
 use game_logic::{CreatureBundle, FruitBundle, GameLogicPlugin, Position};

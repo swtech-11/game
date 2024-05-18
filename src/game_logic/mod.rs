@@ -94,6 +94,7 @@ fn move_creature(
     }
 }
 
+#[cfg(not(feature = "render"))]
 fn move_single_creature(mut query: Query<&mut Position, With<Creature>>) {
     for mut position in query.iter_mut() {
         use std::io::{self, Write};
