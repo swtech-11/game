@@ -14,9 +14,6 @@
         "--features",
         "debug"
       ],
-      "env": {
-        "RUST_LOG": "debug"
-      },
       "problemMatcher": ["$rustc"],
       "label": "render, debug"
     },
@@ -24,9 +21,6 @@
       "type": "cargo",
       "command": "run",
       "args": ["--package", "game", "--bin", "game", "--features", "render"],
-      "env": {
-        "RUST_LOG": "info"
-      },
       "problemMatcher": ["$rustc"],
       "label": "render"
     },
@@ -34,21 +28,8 @@
       "type": "cargo",
       "command": "run",
       "args": ["--package", "game", "--bin", "game", "--features", "debug"],
-      "env": {
-        "RUST_LOG": "debug"
-      },
       "problemMatcher": ["$rustc"],
       "label": "debug"
-    },
-    {
-      "type": "cargo",
-      "command": "run",
-      "args": ["--package", "game", "--bin", "game"],
-      "env": {
-        "RUST_LOG": "info"
-      },
-      "problemMatcher": ["$rustc"],
-      "label": "none"
     }
   ]
 }
