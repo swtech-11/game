@@ -1,6 +1,6 @@
 mod game_logic;
 mod render;
-use bevy::{input::InputPlugin, prelude::*};
+use bevy::prelude::*;
 use env_logger;
 
 use game_logic::{CreatureBundle, FruitBundle, GameLogicPlugin, Position};
@@ -17,7 +17,10 @@ fn main() {
         app.add_plugins((DefaultPlugins, RenderPlugin));
     }
     #[cfg(not(feature = "render"))]
-    app.add_plugins((MinimalPlugins, InputPlugin));
+    {
+        use bevy::input::InputPlugin;
+        app.add_plugins((MinimalPlugins, InputPlugin));
+    }
 
     app.run();
 }
