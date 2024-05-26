@@ -90,7 +90,7 @@ fn move_creature(
         if input.just_pressed(KeyCode::ArrowDown) && position.y > 0 {
             position.y -= 1;
         }
-        log::debug!("Creature new location x: {}, y: {}", position.x, position.y);
+        log::info!("Creature new location x: {}, y: {}", position.x, position.y);
     }
 }
 
@@ -117,7 +117,7 @@ fn move_single_creature(mut query: Query<&mut Position, With<Creature>>) {
             position.y -= 1;
         };
 
-        log::debug!("Creature new location x: {}, y: {}", position.x, position.y);
+        log::info!("Creature new location x: {}, y: {}", position.x, position.y);
     }
 }
 
@@ -134,7 +134,7 @@ fn eat_fruit(
                     .entity(creature_entity)
                     .insert(Nutrient(creature_nutrient.0 + fruit_nutrient.0));
 
-                log::debug!(
+                log::info!(
                     "Creature ate fruit. Creature nutrient: {}",
                     creature_nutrient.0 + fruit_nutrient.0
                 );
