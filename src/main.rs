@@ -3,13 +3,13 @@ mod render;
 use bevy::prelude::*;
 use env_logger;
 
-use game_logic::{CreatureBundle, FruitBundle, GameLogicPlugin, Position};
+use game_logic::GameLogicPlugin;
 
 fn main() {
     env_logger::init();
 
     let mut app = App::new();
-    app.add_plugins(GameLogicPlugin).add_systems(Startup, setup);
+    app.add_plugins(GameLogicPlugin);
 
     #[cfg(feature = "render")]
     {
@@ -23,9 +23,4 @@ fn main() {
     }
 
     app.run();
-}
-
-fn setup(mut commands: Commands) {
-    commands.spawn(CreatureBundle::new(Position { x: 5, y: 5 }));
-    commands.spawn(FruitBundle::new(Position { x: 10, y: 10 }));
 }
