@@ -1,23 +1,18 @@
 use bevy::prelude::*;
-use bevy_pancam::{PanCam, PanCamPlugin};
 use bevy_rapier2d::prelude::*;
+use camera::CameraPlugin;
+
+mod camera;
 
 fn main() {
     App::new()
-        .add_plugins((DefaultPlugins, PanCamPlugin::default()))
+        .add_plugins(DefaultPlugins)
+        .add_plugins(CameraPlugin)
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
         .add_plugins(RapierDebugRenderPlugin::default())
-        .add_systems(Startup, setup_graphics)
         .add_systems(Startup, setup_physics)
         .add_systems(Update, print_ball_altitude)
         .run();
-}
-
-fn setup_graphics(mut commands: Commands) {
-    // Add a camera so we can see the debug-render.
-    commands
-        .spawn(Camera2dBundle::default())
-        .insert(PanCam::default());
 }
 
 fn setup_physics(mut commands: Commands) {
