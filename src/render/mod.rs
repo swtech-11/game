@@ -50,7 +50,7 @@ fn creature_render(
     };
 
     for (entity, position) in query.iter() {
-        log::info!("Spawning creature");
+        log::debug!("Spawning creature");
         let mut mesh = mesh_bundle.clone();
         mesh.transform = Transform::from_translation(Vec3::new(
             position.x as f32 * CELL_SIZE,
