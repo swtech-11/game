@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use log;
 
 use crate::game_logic::GRID_SIZE;
 

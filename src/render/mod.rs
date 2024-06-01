@@ -1,5 +1,4 @@
 use crate::game_logic::{Creature, Position};
-use log;
 mod debug;
 
 use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
@@ -21,8 +20,8 @@ impl Plugin for RenderPlugin {
 
         app.add_plugins((PanCamPlugin::default(),))
             .add_systems(Startup, setup)
-            .add_systems(PostStartup, create_render)
-            .add_systems(Update, position_sync);
+            .add_systems(Update, creature_render)
+            .add_systems(Update, creature_position);
     }
 }
 
@@ -32,9 +31,10 @@ fn setup(mut commands: Commands) {
         .insert(PanCam::default());
 }
 
-fn create_render(
+fn creature_render(
     mut commands: Commands,
-    entity: Query<Entity, With<Creature>>,
+    query: Query<(Entity, &Position), Added<Creature>>,
+
     mut materials: ResMut<Assets<ColorMaterial>>,
     mut meshes: ResMut<Assets<Mesh>>,
 ) {
@@ -49,13 +49,19 @@ fn create_render(
         ..default()
     };
 
-    for entity in entity.iter() {
-        dbg!(entity);
-        commands.entity(entity).insert(mesh_bundle.clone());
+    for (entity, position) in query.iter() {
+        log::info!("Spawning creature");
+        let mut mesh = mesh_bundle.clone();
+        mesh.transform = Transform::from_translation(Vec3::new(
+            position.x as f32 * CELL_SIZE,
+            position.y as f32 * CELL_SIZE,
+            0.0,
+        ));
+        commands.entity(entity).insert(mesh);
     }
 }
 
-fn position_sync(mut query: Query<(&Position, &mut Transform), Changed<Position>>) {
+fn creature_position(mut query: Query<(&Position, &mut Transform), Changed<Position>>) {
     for (position, mut transform) in query.iter_mut() {
         let mut final_position: (f32, f32) = (0.0, 0.0);
         final_position.0 = position.x as f32 * CELL_SIZE + CELL_SIZE / 2.0;

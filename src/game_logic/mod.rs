@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use log;
 
 pub const GRID_SIZE: u8 = 20;
 
@@ -19,19 +18,6 @@ pub struct Nutrient(u8);
 pub struct Position {
     pub x: u8,
     pub y: u8,
-}
-
-pub struct GameLogicPlugin;
-
-impl Plugin for GameLogicPlugin {
-    fn build(&self, app: &mut App) {
-        log::info!("Initializing GameLogicPlugin");
-        #[cfg(feature = "render")]
-        app.add_systems(Update, move_creature);
-        #[cfg(not(feature = "render"))]
-        app.add_systems(Update, move_single_creature);
-        app.add_systems(Update, eat_fruit);
-    }
 }
 
 #[derive(Bundle)]
@@ -70,6 +56,25 @@ impl FruitBundle {
             nutrient: Nutrient(1),
         }
     }
+}
+
+pub struct GameLogicPlugin;
+
+impl Plugin for GameLogicPlugin {
+    fn build(&self, app: &mut App) {
+        log::info!("Initializing GameLogicPlugin");
+        #[cfg(feature = "render")]
+        app.add_systems(Update, move_creature);
+        #[cfg(not(feature = "render"))]
+        app.add_systems(Update, move_single_creature);
+        app.add_systems(Update, eat_fruit);
+        app.add_systems(Startup, setup);
+    }
+}
+
+fn setup(mut commands: Commands) {
+    commands.spawn(CreatureBundle::new(Position { x: 5, y: 5 }));
+    commands.spawn(FruitBundle::new(Position { x: 10, y: 10 }));
 }
 
 #[cfg(feature = "render")]
