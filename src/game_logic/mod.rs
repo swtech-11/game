@@ -14,7 +14,7 @@ pub struct Health(bool);
 #[derive(Component)]
 pub struct Nutrient(u8);
 
-#[derive(Component)]
+#[derive(Component, PartialEq, Clone)]
 pub struct Position {
     pub x: u8,
     pub y: u8,
@@ -84,6 +84,7 @@ fn move_creature(
     input: Res<ButtonInput<KeyCode>>,
 ) {
     for mut position in query.iter_mut() {
+        let old_position = position.clone();
         if input.just_pressed(KeyCode::ArrowRight) && position.x < GRID_SIZE - 1 {
             position.x += 1;
         }
@@ -96,7 +97,9 @@ fn move_creature(
         if input.just_pressed(KeyCode::ArrowDown) && position.y > 0 {
             position.y -= 1;
         }
-        log::info!("Creature new location x: {}, y: {}", position.x, position.y);
+        if old_position != *position {
+            log::info!("Creature new location x: {}, y: {}", position.x, position.y);
+        }
     }
 }
 
