@@ -1,13 +1,10 @@
 mod game_logic;
 mod render;
 use bevy::prelude::*;
-use env_logger;
 
 use game_logic::GameLogicPlugin;
 
 fn main() {
-    env_logger::init();
-
     let mut app = App::new();
     app.add_plugins(GameLogicPlugin);
 
