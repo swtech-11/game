@@ -62,7 +62,7 @@ pub struct GameLogicPlugin;
 
 impl Plugin for GameLogicPlugin {
     fn build(&self, app: &mut App) {
-        log::info!("Initializing GameLogicPlugin");
+        log::info!("GameLogicPlugin: Init");
         #[cfg(feature = "render")]
         app.add_systems(Startup, setup);
         app.add_systems(Update, move_creature);

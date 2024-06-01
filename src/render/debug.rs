@@ -8,7 +8,7 @@ pub struct RenderDebugPlugin;
 
 impl Plugin for RenderDebugPlugin {
     fn build(&self, app: &mut App) {
-        log::info!("Initializing RenderDebugPlugin");
+        log::info!("RenderDebugPlugin: init");
         app.add_systems(Startup, config_gizmos)
             .add_systems(Update, draw_grid);
     }

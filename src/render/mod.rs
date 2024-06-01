@@ -10,7 +10,7 @@ pub struct RenderPlugin;
 
 impl Plugin for RenderPlugin {
     fn build(&self, app: &mut App) {
-        log::info!("Initializing RenderPlugin");
+        log::info!("RenderPlugin: init");
 
         #[cfg(feature = "debug")]
         {
