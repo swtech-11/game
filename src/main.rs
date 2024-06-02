@@ -2,11 +2,13 @@ use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use camera::CameraPlugin;
 use creature::CreaturePlugin;
+use gizmos::GizmosPlugin;
 use persistent_window::PersistentWindowPlugin;
 use physics::PhysicsPlugin;
 
 mod camera;
 mod creature;
+mod gizmos;
 mod persistent_window;
 mod physics;
 
@@ -25,5 +27,6 @@ fn main() {
         .add_plugins(PhysicsPlugin)
         .add_plugins(CreaturePlugin)
         .add_plugins(WorldInspectorPlugin::new())
+        .add_plugins(GizmosPlugin)
         .run();
 }
