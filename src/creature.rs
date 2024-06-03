@@ -19,17 +19,11 @@ fn setup(mut commands: Commands) {
         .insert(ReadMassProperties::default());
 }
 
-fn movement(
-    input: Res<ButtonInput<KeyCode>>,
-    query: Query<Entity, With<RigidBody>>,
-    mut commands: Commands,
-) {
-    if input.just_pressed(KeyCode::ArrowUp) {
-        for body in query.iter() {
-            commands.entity(body).insert(ExternalImpulse {
-                impulse: Vec2::new(1.0, 0.0),
-                ..Default::default()
-            });
-        }
+fn movement(query: Query<Entity, With<RigidBody>>, mut commands: Commands) {
+    for body in query.iter() {
+        commands.entity(body).insert(ExternalImpulse {
+            impulse: Vec2::new(1.0, 0.0),
+            ..Default::default()
+        });
     }
 }
