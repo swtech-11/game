@@ -6,6 +6,11 @@ pub struct PersistentWindowPlugin;
 
 impl Plugin for PersistentWindowPlugin {
     fn build(&self, app: &mut App) {
+        app.add_plugins(WindowPlugin {
+            primary_window: None,
+            ..Default::default()
+        });
+
         let state_directory = dirs::data_dir()
             .expect("failed to get the platforms data directory")
             .join("your-amazing-game")
