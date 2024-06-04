@@ -6,8 +6,10 @@ pub struct PhysicsPlugin;
 impl Plugin for PhysicsPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(0.0))
-            .add_plugins(RapierDebugRenderPlugin::default())
             .add_systems(Update, drag);
+
+        #[cfg(feature = "render")]
+        app.add_plugins(RapierDebugRenderPlugin::default());
     }
 }
 
