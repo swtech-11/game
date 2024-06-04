@@ -1,11 +1,13 @@
 use bevy::prelude::*;
+use bevy_rapier2d::render::RapierDebugRenderPlugin;
 
 pub struct GizmosPlugin;
 
 impl Plugin for GizmosPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup)
-            .add_systems(Update, draw_gizmos);
+            .add_systems(Update, draw_gizmos)
+            .add_plugins(RapierDebugRenderPlugin::default());
     }
 }
 
