@@ -13,6 +13,12 @@ impl Plugin for CameraPlugin {
 fn setup(mut commands: Commands) {
     // Add a camera so we can see the debug-render.
     commands
-        .spawn(Camera2dBundle::default())
+        .spawn(Camera2dBundle {
+            projection: OrthographicProjection {
+                scale: 0.05,
+                ..default()
+            },
+            ..default()
+        })
         .insert(PanCam::default());
 }
