@@ -1,22 +1,18 @@
 use bevy::prelude::*;
-use creature::CreaturePlugin;
 use fps::FPSPlugin;
-
-use physics::PhysicsPlugin;
+use game_logic::GameLogicPlugin;
 
 mod camera;
-mod creature;
 mod fps;
+mod game_logic;
 mod gizmos;
 mod persistent_window;
-mod physics;
 
 fn main() {
     let mut app = App::new();
 
     app.add_plugins(MinimalPlugins)
-        .add_plugins(PhysicsPlugin)
-        .add_plugins(CreaturePlugin)
+        .add_plugins(GameLogicPlugin)
         .add_plugins(FPSPlugin);
 
     #[cfg(feature = "render")]
