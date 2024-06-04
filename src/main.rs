@@ -9,9 +9,8 @@ mod render;
 fn main() {
     let mut app = App::new();
 
-    app.add_plugins(MinimalPlugins)
-        .add_plugins(GameLogicPlugin)
-        .add_plugins(FPSPlugin);
+    app.add_plugins(MinimalPlugins).add_plugins(GameLogicPlugin);
+    // .add_plugins(FPSPlugin);
 
     #[cfg(feature = "render")]
     {

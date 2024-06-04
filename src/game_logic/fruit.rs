@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+#[derive(Component)]
+pub struct Fruit;
+
 pub struct FruitPlugin;
 
 impl Plugin for FruitPlugin {
@@ -25,5 +28,6 @@ fn setup(mut commands: Commands) {
             },
             ..Default::default()
         })
-        .insert(ReadMassProperties::default());
+        .insert(ReadMassProperties::default())
+        .insert(Fruit);
 }

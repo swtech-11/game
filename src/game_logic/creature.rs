@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 #[derive(Component)]
-struct Creature;
+pub struct Creature;
 
 pub struct CreaturePlugin;
 
@@ -20,6 +20,7 @@ fn setup(mut commands: Commands) {
         .insert(Velocity::default())
         .insert(TransformBundle::default())
         .insert(ReadMassProperties::default())
+        .insert(ActiveEvents::COLLISION_EVENTS)
         .insert(Creature);
 }
 
