@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+#[derive(Component)]
+struct Creature;
+
 pub struct CreaturePlugin;
 
 impl Plugin for CreaturePlugin {
@@ -16,10 +19,11 @@ fn setup(mut commands: Commands) {
         .insert(RigidBody::Dynamic)
         .insert(Velocity::default())
         .insert(TransformBundle::default())
-        .insert(ReadMassProperties::default());
+        .insert(ReadMassProperties::default())
+        .insert(Creature);
 }
 
-fn movement(query: Query<Entity, With<RigidBody>>, mut commands: Commands) {
+fn movement(query: Query<Entity, With<Creature>>, mut commands: Commands) {
     for body in query.iter() {
         commands.entity(body).insert(ExternalImpulse {
             impulse: Vec2::new(1.0, 0.0),
