@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
-use creature::{Creature, CreaturePlugin};
-use fruit::{Fruit, FruitPlugin};
+use creature::{Creature, CreaturePlugin, Nutrition};
+use fruit::FruitPlugin;
 use physics::PhysicsPlugin;
 
 mod creature;
@@ -22,13 +22,17 @@ impl Plugin for GameLogicPlugin {
 fn eat(
     mut commands: Commands,
     mut collision_events: EventReader<CollisionEvent>,
-    // creature_query: Query<Entity, With<Creature>>,
-    // fruit_query: Query<Entity, With<Fruit>>,
+    creature_query: Query<&Nutrition, With<Creature>>,
 ) {
     for collision_event in collision_events.read() {
         match collision_event {
             CollisionEvent::Started(collider1, collider2, _) => {
                 commands.entity(*collider1).despawn();
+                if let Ok(nutrition) = creature_query.get(*collider2) {
+                    commands
+                        .entity(*collider2)
+                        .insert(Nutrition(nutrition.0 + 1));
+                }
             }
             _ => (),
         }

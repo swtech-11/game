@@ -29,5 +29,6 @@ fn setup(mut commands: Commands) {
             ..Default::default()
         })
         .insert(ReadMassProperties::default())
+        .insert(ActiveEvents::COLLISION_EVENTS)
         .insert(Fruit);
 }

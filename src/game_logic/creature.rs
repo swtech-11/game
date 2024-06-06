@@ -4,6 +4,9 @@ use bevy_rapier2d::prelude::*;
 #[derive(Component)]
 pub struct Creature;
 
+#[derive(Component)]
+pub struct Nutrition(pub u8);
+
 pub struct CreaturePlugin;
 
 impl Plugin for CreaturePlugin {
@@ -21,6 +24,7 @@ fn setup(mut commands: Commands) {
         .insert(TransformBundle::default())
         .insert(ReadMassProperties::default())
         .insert(ActiveEvents::COLLISION_EVENTS)
+        .insert(Nutrition(0))
         .insert(Creature);
 }
 
