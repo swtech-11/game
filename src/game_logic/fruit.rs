@@ -4,31 +4,30 @@ use bevy_rapier2d::prelude::*;
 #[derive(Component)]
 pub struct Fruit;
 
-pub struct FruitPlugin;
-
-impl Plugin for FruitPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup);
-    }
+#[derive(Bundle)]
+pub struct FruitBundle {
+    pub collider: Collider,
+    pub rigid_body: RigidBody,
+    pub velocity: Velocity,
+    pub transform: TransformBundle,
+    pub mass_properties: ReadMassProperties,
+    pub active_events: ActiveEvents,
+    pub fruit: Fruit,
 }
 
-fn setup(mut commands: Commands) {
-    commands
-        .spawn(Collider::ball(1.0))
-        .insert(RigidBody::Dynamic)
-        .insert(Velocity::default())
-        .insert(TransformBundle {
-            local: Transform {
-                translation: Vec3 {
-                    x: 10.0,
-                    y: 0.0,
-                    z: 0.0,
-                },
+impl Default for FruitBundle {
+    fn default() -> Self {
+        Self {
+            collider: Collider::ball(1.0),
+            rigid_body: RigidBody::Dynamic,
+            velocity: Velocity::default(),
+            transform: TransformBundle {
+                local: Transform::from_xyz(0.0, 0.0, 0.0),
                 ..Default::default()
             },
-            ..Default::default()
-        })
-        .insert(ReadMassProperties::default())
-        .insert(ActiveEvents::COLLISION_EVENTS)
-        .insert(Fruit);
+            mass_properties: ReadMassProperties::default(),
+            active_events: ActiveEvents::COLLISION_EVENTS,
+            fruit: Fruit,
+        }
+    }
 }

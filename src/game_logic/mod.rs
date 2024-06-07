@@ -1,9 +1,14 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use creature::{Creature, CreaturePlugin, Nutrition};
-use fruit::{Fruit, FruitPlugin};
+use fruit::{Fruit, FruitBundle};
 use physics::PhysicsPlugin;
 use wall::WallPlugin;
+
+use crate::{
+    config::{BOUNDS_X, BOUNDS_Y},
+    rng::in_bounds_rng,
+};
 
 mod creature;
 mod fruit;
@@ -17,9 +22,16 @@ impl Plugin for GameLogicPlugin {
         app.add_plugins(PhysicsPlugin)
             .add_plugins(CreaturePlugin)
             .add_systems(Update, eat)
-            .add_plugins(FruitPlugin)
+            .add_systems(Startup, setup)
             .add_plugins(WallPlugin);
     }
+}
+
+fn setup(mut commands: Commands) {
+    commands.spawn(FruitBundle {
+        transform: in_bounds_rng(),
+        ..Default::default()
+    });
 }
 
 fn eat(
@@ -39,6 +51,11 @@ fn eat(
                             .entity(*collider2)
                             .insert(Nutrition(nutrition.0 + 1));
                     }
+
+                    commands.spawn(FruitBundle {
+                        transform: in_bounds_rng(),
+                        ..Default::default()
+                    });
                 }
             }
             _ => (),

@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+use crate::rng::in_bounds_rng;
+
 #[derive(Component)]
 pub struct Creature;
 
@@ -21,7 +23,7 @@ fn setup(mut commands: Commands) {
         .spawn(Collider::cuboid(1.0, 1.0))
         .insert(RigidBody::Dynamic)
         .insert(Velocity::default())
-        .insert(TransformBundle::default())
+        .insert(in_bounds_rng())
         .insert(ReadMassProperties::default())
         .insert(ActiveEvents::COLLISION_EVENTS)
         .insert(Nutrition(0))

@@ -17,14 +17,14 @@ fn setup(mut commands: Commands) {
             children
                 .spawn(Collider::cuboid(1.0, BOUNDS_Y / 2.0))
                 .insert(TransformBundle::from(Transform::from_xyz(
-                    0.0,
+                    0.0 - 1.0,
                     BOUNDS_Y / 2.0,
                     0.0,
                 )));
             children
                 .spawn(Collider::cuboid(1.0, BOUNDS_Y / 2.0))
                 .insert(TransformBundle::from(Transform::from_xyz(
-                    BOUNDS_X,
+                    BOUNDS_X + 1.0,
                     BOUNDS_Y / 2.0,
                     0.0,
                 )));
@@ -32,14 +32,14 @@ fn setup(mut commands: Commands) {
                 .spawn(Collider::cuboid(BOUNDS_X / 2.0, 1.0))
                 .insert(TransformBundle::from(Transform::from_xyz(
                     BOUNDS_X / 2.0,
-                    0.0,
+                    0.0 - 1.0,
                     0.0,
                 )));
             children
                 .spawn(Collider::cuboid(BOUNDS_X / 2.0, 1.0))
                 .insert(TransformBundle::from(Transform::from_xyz(
                     BOUNDS_X / 2.0,
-                    BOUNDS_Y,
+                    BOUNDS_Y + 1.0,
                     0.0,
                 )));
         });
