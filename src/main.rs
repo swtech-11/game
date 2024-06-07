@@ -12,9 +12,7 @@ fn main() {
     app.add_plugins(MinimalPlugins).add_plugins(GameLogicPlugin);
 
     #[cfg(feature = "render")]
-    {
-        app.add_plugins(render::RenderPlugin);
-    }
+    app.add_plugins(render::RenderPlugin);
 
     app.run()
 }

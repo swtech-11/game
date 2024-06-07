@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::rng::in_bounds_rng;
+use crate::rng::{in_bounds_rng, rand_float};
 
 #[derive(Component)]
 pub struct Creature;
@@ -13,8 +13,11 @@ pub struct CreaturePlugin;
 
 impl Plugin for CreaturePlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup)
-            .add_systems(Update, movement);
+        app.add_systems(Startup, setup);
+        // .add_systems(Update, movement);
+
+        #[cfg(feature = "render")]
+        app.add_systems(Update, input);
     }
 }
 
@@ -33,8 +36,37 @@ fn setup(mut commands: Commands) {
 
 fn movement(query: Query<Entity, With<Creature>>, mut commands: Commands) {
     for body in query.iter() {
+        let impulse = Vec2::new(rand_float(-10.0, 10.0), rand_float(-10.0, 10.0));
         commands.entity(body).insert(ExternalImpulse {
-            impulse: Vec2::new(1.0, 0.0),
+            impulse,
+            ..Default::default()
+        });
+    }
+}
+
+fn input(
+    keyboard_input: Res<ButtonInput<KeyCode>>,
+    query: Query<Entity, With<Creature>>,
+    mut commands: Commands,
+) {
+    for body in query.iter() {
+        let mut impulse = Vec2::ZERO;
+
+        if keyboard_input.pressed(KeyCode::ArrowLeft) {
+            impulse.x -= 10.0;
+        }
+        if keyboard_input.pressed(KeyCode::ArrowRight) {
+            impulse.x += 10.0;
+        }
+        if keyboard_input.pressed(KeyCode::ArrowUp) {
+            impulse.y += 10.0;
+        }
+        if keyboard_input.pressed(KeyCode::ArrowDown) {
+            impulse.y -= 10.0;
+        }
+
+        commands.entity(body).insert(ExternalImpulse {
+            impulse,
             ..Default::default()
         });
     }

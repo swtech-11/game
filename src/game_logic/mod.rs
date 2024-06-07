@@ -34,25 +34,41 @@ fn setup(mut commands: Commands) {
 fn eat(
     mut commands: Commands,
     mut collision_events: EventReader<CollisionEvent>,
-    creature_query: Query<&Nutrition, With<Creature>>,
-    fruit_query: Query<(), With<Fruit>>,
+    creature_query: Query<(Entity, &Nutrition), With<Creature>>,
+    fruit_query: Query<Entity, With<Fruit>>,
 ) {
     for collision_event in collision_events.read() {
+        let other;
+        let creature;
+
         match collision_event {
             CollisionEvent::Started(collider1, collider2, _) => {
-                if fruit_query.get(*collider1).is_ok() {
-                    commands.entity(*collider1).despawn();
-
-                    if let Ok(nutrition) = creature_query.get(*collider2) {
-                        commands
-                            .entity(*collider2)
-                            .insert(Nutrition(nutrition.0 + 1));
+                match creature_query.get(*collider1).ok() {
+                    Some(c) => {
+                        other = *collider2;
+                        creature = c
                     }
+                    _ => match creature_query.get(*collider2).ok() {
+                        Some(c) => {
+                            other = *collider1;
+                            creature = c
+                        }
+                        _ => continue,
+                    },
+                }
 
-                    commands.spawn(FruitBundle {
-                        transform: in_bounds_rng(),
-                        ..Default::default()
-                    });
+                match fruit_query.get(other).ok() {
+                    Some(e) => {
+                        commands.entity(e).despawn();
+                        commands
+                            .entity(creature.0)
+                            .insert(Nutrition(creature.1 .0 + 1));
+                        commands.spawn(FruitBundle {
+                            transform: in_bounds_rng(),
+                            ..Default::default()
+                        });
+                    }
+                    _ => continue,
                 }
             }
             _ => (),
