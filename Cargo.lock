@@ -2092,6 +2092,7 @@ dependencies = [
  "bevy_pancam",
  "bevy_rapier2d",
  "dirs",
+ "log",
 ]
 
 [[package]]

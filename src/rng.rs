@@ -28,12 +28,13 @@ impl LCG {
     }
 }
 
-fn generate_random_float_in_range(min: f32, max: f32) -> f32 {
-    // Using the current time as a seed
-    let seed = SystemTime::now()
+pub fn rand_float(min: f32, max: f32) -> f32 {
+    // Using the current time as a seed with nanoseconds included
+    let duration = SystemTime::now()
         .duration_since(UNIX_EPOCH)
-        .expect("Time went backwards")
-        .as_secs();
+        .expect("Time went backwards");
+
+    let seed = duration.as_secs() ^ duration.subsec_nanos() as u64;
 
     let mut lcg = LCG::new(seed);
     let random_fraction = lcg.next_float();
@@ -41,8 +42,8 @@ fn generate_random_float_in_range(min: f32, max: f32) -> f32 {
 }
 
 pub fn in_bounds_rng() -> TransformBundle {
-    let x = generate_random_float_in_range(0.0, BOUNDS_X);
-    let y = generate_random_float_in_range(0.0, BOUNDS_Y);
+    let x = rand_float(0.0, BOUNDS_X);
+    let y = rand_float(0.0, BOUNDS_Y);
     TransformBundle {
         local: Transform::from_xyz(x, y, 0.0),
         ..Default::default()

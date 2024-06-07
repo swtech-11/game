@@ -27,6 +27,7 @@ fn setup(mut commands: Commands) {
         .insert(ReadMassProperties::default())
         .insert(ActiveEvents::COLLISION_EVENTS)
         .insert(Nutrition(0))
+        .insert(Name::new("Creature"))
         .insert(Creature);
 }
 

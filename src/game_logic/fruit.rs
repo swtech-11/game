@@ -13,6 +13,7 @@ pub struct FruitBundle {
     pub mass_properties: ReadMassProperties,
     pub active_events: ActiveEvents,
     pub fruit: Fruit,
+    pub name: Name,
 }
 
 impl Default for FruitBundle {
@@ -28,6 +29,7 @@ impl Default for FruitBundle {
             mass_properties: ReadMassProperties::default(),
             active_events: ActiveEvents::COLLISION_EVENTS,
             fruit: Fruit,
+            name: Name::new("Fruit"),
         }
     }
 }

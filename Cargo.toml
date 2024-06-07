@@ -14,6 +14,7 @@ bevy_rapier2d = { version = "0.26.0", features = [
     "debug-render-2d",
 ] }
 dirs = "5.0.1"
+log = "0.4.21"
 
 # Enable a small amount of optimization in debug mode
 [profile.dev]
