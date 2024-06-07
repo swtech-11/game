@@ -5,10 +5,7 @@ use fruit::{Fruit, FruitBundle};
 use physics::PhysicsPlugin;
 use wall::WallPlugin;
 
-use crate::{
-    config::{BOUNDS_X, BOUNDS_Y},
-    rng::in_bounds_rng,
-};
+use crate::rng::in_bounds_rng;
 
 mod creature;
 mod fruit;
