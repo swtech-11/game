@@ -1,4 +1,7 @@
-use bevy::{prelude::*, window::PrimaryWindow};
+use bevy::{
+    prelude::*,
+    window::{PresentMode, PrimaryWindow},
+};
 use bevy_persistent::prelude::*;
 use bevy_persistent_windows::prelude::*;
 
@@ -21,6 +24,8 @@ impl Plugin for PersistentWindowPlugin {
             PersistentWindowBundle {
                 window: Window {
                     title: "I am the primary window!".to_owned(),
+                    present_mode: PresentMode::Fifo, // This is the default, but I'm still playing around
+                    // present_mode: PresentMode::Immediate,
                     ..Default::default()
                 },
                 state: Persistent::<WindowState>::builder()
