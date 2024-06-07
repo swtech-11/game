@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy::time::TimePlugin;
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use camera::CameraPlugin;
 use gizmos::GizmosPlugin;
 use persistent_window::PersistentWindowPlugin;
@@ -20,6 +21,7 @@ impl Plugin for RenderPlugin {
             .disable::<FrameCountPlugin>()
             .disable::<TimePlugin>();
         app.add_plugins(default_plugins)
+            .add_plugins(WorldInspectorPlugin::default())
             .add_plugins(PersistentWindowPlugin)
             .add_plugins(CameraPlugin)
             .add_plugins(GizmosPlugin);
