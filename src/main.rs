@@ -1,9 +1,10 @@
 use bevy::prelude::*;
 use game_logic::GameLogicPlugin;
 
-mod fps;
+mod config;
 mod game_logic;
 mod render;
+mod rng;
 
 fn main() {
     let mut app = App::new();

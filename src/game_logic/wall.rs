@@ -1,6 +1,6 @@
+use crate::config::{BOUNDS_X, BOUNDS_Y};
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
-
 pub struct WallPlugin;
 
 impl Plugin for WallPlugin {
@@ -15,16 +15,32 @@ fn setup(mut commands: Commands) {
         .insert(TransformBundle::default())
         .with_children(|children| {
             children
-                .spawn(Collider::cuboid(1.0, 30.0))
-                .insert(TransformBundle::from(Transform::from_xyz(-40.0, 0.0, 0.0)));
+                .spawn(Collider::cuboid(1.0, BOUNDS_Y / 2.0))
+                .insert(TransformBundle::from(Transform::from_xyz(
+                    0.0,
+                    BOUNDS_Y / 2.0,
+                    0.0,
+                )));
             children
-                .spawn(Collider::cuboid(1.0, 30.0))
-                .insert(TransformBundle::from(Transform::from_xyz(40.0, 0.0, 0.0)));
+                .spawn(Collider::cuboid(1.0, BOUNDS_Y / 2.0))
+                .insert(TransformBundle::from(Transform::from_xyz(
+                    BOUNDS_X,
+                    BOUNDS_Y / 2.0,
+                    0.0,
+                )));
             children
-                .spawn(Collider::cuboid(40.0, 1.0))
-                .insert(TransformBundle::from(Transform::from_xyz(0.0, -30.0, 0.0)));
+                .spawn(Collider::cuboid(BOUNDS_X / 2.0, 1.0))
+                .insert(TransformBundle::from(Transform::from_xyz(
+                    BOUNDS_X / 2.0,
+                    0.0,
+                    0.0,
+                )));
             children
-                .spawn(Collider::cuboid(40.0, 1.0))
-                .insert(TransformBundle::from(Transform::from_xyz(0.0, 30.0, 0.0)));
+                .spawn(Collider::cuboid(BOUNDS_X / 2.0, 1.0))
+                .insert(TransformBundle::from(Transform::from_xyz(
+                    BOUNDS_X / 2.0,
+                    BOUNDS_Y,
+                    0.0,
+                )));
         });
 }

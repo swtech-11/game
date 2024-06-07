@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 use bevy_pancam::{PanCam, PanCamPlugin};
 
+use crate::config::{BOUNDS_X, BOUNDS_Y};
+
 pub struct CameraPlugin;
 
 impl Plugin for CameraPlugin {
@@ -18,6 +20,7 @@ fn setup(mut commands: Commands) {
                 scale: 0.05,
                 ..default()
             },
+            transform: Transform::from_xyz(BOUNDS_X / 2.0, BOUNDS_Y / 2.0, 0.0),
             ..default()
         })
         .insert(PanCam::default());
