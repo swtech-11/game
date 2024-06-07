@@ -52,16 +52,16 @@ fn input(
     for body in query.iter() {
         let mut impulse = Vec2::ZERO;
 
-        if keyboard_input.pressed(KeyCode::ArrowLeft) {
+        if keyboard_input.just_pressed(KeyCode::ArrowLeft) {
             impulse.x -= 10.0;
         }
-        if keyboard_input.pressed(KeyCode::ArrowRight) {
+        if keyboard_input.just_pressed(KeyCode::ArrowRight) {
             impulse.x += 10.0;
         }
-        if keyboard_input.pressed(KeyCode::ArrowUp) {
+        if keyboard_input.just_pressed(KeyCode::ArrowUp) {
             impulse.y += 10.0;
         }
-        if keyboard_input.pressed(KeyCode::ArrowDown) {
+        if keyboard_input.just_pressed(KeyCode::ArrowDown) {
             impulse.y -= 10.0;
         }
 
