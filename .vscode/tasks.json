@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "cargo",
+      "command": "run",
+      "args": ["--package", "game", "--bin", "game", "--features", "render"],
+      "problemMatcher": ["$rustc"],
+      "group": "build",
+      "label": "render"
+    },
+    {
+      "type": "cargo",
+      "command": "run",
+      "args": ["--package", "game", "--bin", "game"],
+      "problemMatcher": ["$rustc"],
+      "group": "build",
+      "label": "no render"
+    }
+  ]
+}
