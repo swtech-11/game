@@ -1,3 +1,4 @@
+use bevy::log::LogPlugin;
 use bevy::prelude::*;
 use bevy::time::TimePlugin;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
@@ -19,7 +20,8 @@ impl Plugin for RenderPlugin {
             .disable::<TaskPoolPlugin>()
             .disable::<TypeRegistrationPlugin>()
             .disable::<FrameCountPlugin>()
-            .disable::<TimePlugin>();
+            .disable::<TimePlugin>()
+            .disable::<LogPlugin>();
         app.add_plugins(default_plugins)
             .add_plugins(WorldInspectorPlugin::default())
             .add_plugins(PersistentWindowPlugin)
