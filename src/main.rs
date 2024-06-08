@@ -1,25 +1,7 @@
-use bevy::prelude::*;
-use game_logic::GameLogicPlugin;
-use log::CustomLogPlugin;
-use state::StatePlugin;
-
-mod config;
-mod game_logic;
-mod log;
-mod render;
-mod rng;
-mod state;
+#![allow(unused_imports)]
+use game::{app_with_render, app_without_render};
 
 fn main() {
-    let mut app = App::new();
-
-    app.add_plugins(MinimalPlugins)
-        .add_plugins(GameLogicPlugin)
-        .add_plugins(CustomLogPlugin)
-        .add_plugins(StatePlugin);
-
-    #[cfg(feature = "render")]
-    app.add_plugins(render::RenderPlugin);
-
-    app.run()
+    app_without_render().run();
+    // app_with_render().run();
 }
