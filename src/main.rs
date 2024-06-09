@@ -8,6 +8,7 @@ use game::{
         creature::{Creature, Nutrition},
         fruit::Fruit,
     },
+    render::controllable::Controllable,
 };
 
 fn main() {
@@ -15,6 +16,7 @@ fn main() {
     let mut app = app_with_render();
     app.world.spawn((
         Creature,
+        Controllable,
         Nutrition(0),
         Collider::ball(1.0),
         RigidBody::Dynamic,
@@ -30,7 +32,7 @@ fn main() {
         RigidBody::Dynamic,
         ActiveEvents::COLLISION_EVENTS,
         TransformBundle {
-            local: Transform::from_xyz(3.0, 3.0, 0.0),
+            local: Transform::from_xyz(10.0, 10.0, 0.0),
             ..Default::default()
         },
     ));

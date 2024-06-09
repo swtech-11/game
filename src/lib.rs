@@ -6,7 +6,7 @@ use state::StatePlugin;
 pub mod config;
 pub mod game_logic;
 mod log;
-mod render;
+pub mod render;
 mod rng;
 mod state;
 

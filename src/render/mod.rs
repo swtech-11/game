@@ -3,10 +3,12 @@ use bevy::prelude::*;
 use bevy::time::TimePlugin;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use camera::CameraPlugin;
+use controllable::control;
 use gizmos::GizmosPlugin;
 use persistent_window::PersistentWindowPlugin;
 
 mod camera;
+pub mod controllable;
 mod gizmos;
 mod persistent_window;
 
@@ -26,6 +28,7 @@ impl Plugin for RenderPlugin {
             .add_plugins(WorldInspectorPlugin::default())
             .add_plugins(PersistentWindowPlugin)
             .add_plugins(CameraPlugin)
-            .add_plugins(GizmosPlugin);
+            .add_plugins(GizmosPlugin)
+            .add_systems(Update, control);
     }
 }
