@@ -1,9 +1,5 @@
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use bevy::transform::{components::Transform, TransformBundle};
-
-use crate::config::{BOUNDS_X, BOUNDS_Y};
-
 struct LCG {
     state: u64,
 }
@@ -39,13 +35,4 @@ pub fn rand_float(min: f32, max: f32) -> f32 {
     let mut lcg = LCG::new(seed);
     let random_fraction = lcg.next_float();
     min + random_fraction * (max - min)
-}
-
-pub fn in_bounds_rng() -> TransformBundle {
-    let x = rand_float(0.0, BOUNDS_X);
-    let y = rand_float(0.0, BOUNDS_Y);
-    TransformBundle {
-        local: Transform::from_xyz(x, y, 0.0),
-        ..Default::default()
-    }
 }
