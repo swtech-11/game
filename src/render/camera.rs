@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_pancam::{PanCam, PanCamPlugin};
 
-use crate::config::{BOUNDS_X, BOUNDS_Y};
+use crate::config::ConfigRes;
 
 pub struct CameraPlugin;
 
@@ -12,7 +12,7 @@ impl Plugin for CameraPlugin {
     }
 }
 
-fn setup(mut commands: Commands) {
+fn setup(mut commands: Commands, config: Res<ConfigRes>) {
     // Add a camera so we can see the debug-render.
     commands
         .spawn(Camera2dBundle {
@@ -20,7 +20,7 @@ fn setup(mut commands: Commands) {
                 scale: 0.05,
                 ..default()
             },
-            transform: Transform::from_xyz(BOUNDS_X / 2.0, BOUNDS_Y / 2.0, 0.0),
+            transform: Transform::from_xyz(config.bounds.x / 2.0, config.bounds.y / 2.0, 0.0),
             ..default()
         })
         .insert(PanCam::default());

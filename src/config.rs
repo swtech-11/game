@@ -1,2 +1,6 @@
-pub const BOUNDS_X: f32 = 20.0;
-pub const BOUNDS_Y: f32 = 20.0;
+use bevy::prelude::*;
+
+#[derive(Resource)]
+pub struct ConfigRes {
+    pub bounds: Vec2,
+}
