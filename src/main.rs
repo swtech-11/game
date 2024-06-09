@@ -12,8 +12,8 @@ use game::{
 };
 
 fn main() {
-    // app_without_render().run();
-    let mut app = app_with_render();
+    let mut app = app_without_render();
+    // let mut app = app_with_render();
     app.world.spawn((
         Creature,
         Controllable,
