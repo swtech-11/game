@@ -22,6 +22,7 @@ fn main() {
             local: Transform::from_xyz(3.0, 3.0, 0.0),
             ..Default::default()
         },
+        impulse: ExternalImpulse::default(),
     };
     let fruit = FruitBundle {
         fruit: Fruit,

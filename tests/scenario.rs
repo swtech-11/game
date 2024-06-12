@@ -22,6 +22,7 @@ fn scenario() {
             local: Transform::from_xyz(3.0, 3.0, 0.0),
             ..Default::default()
         },
+        impulse: ExternalImpulse::default(),
     };
     let fruit = FruitBundle {
         fruit: Fruit,
@@ -37,18 +38,47 @@ fn scenario() {
         bounds: Vec2::new(20.0, 20.0),
     };
 
-    // let mut app = game::app_without_render();
-    // app.world.spawn(creature.clone());
-    // app.world.spawn(fruit.clone());
-    // app.insert_resource(config.clone());
-    // app.update();
+    let mut app = game::app_without_render();
+    let creature_entity = app.world.spawn(creature).id();
+    app.world.spawn(fruit);
+    app.insert_resource(config);
+    app.update();
 
-    let mut app_render = game::app_with_render();
-    app_render.world.spawn(creature);
-    app_render.world.spawn(fruit);
-    app_render.insert_resource(config);
-    app_render.update();
+    {
+        let creature_ref = app.world.get_entity(creature_entity).unwrap();
+        let transform = creature_ref.get::<Transform>().unwrap();
+        dbg!(transform.translation);
+    }
+    app.update();
 
-    // app.world.query::<((), With<Creature>)>();
-    // dbg!(app.world);
+    {
+        let mut creature_ref = app.world.get_entity_mut(creature_entity).unwrap();
+        {
+            let mut impulse = creature_ref.get_mut::<ExternalImpulse>().unwrap();
+            impulse.impulse = Vec2::new(10.0, 0.0);
+        }
+        let transform = creature_ref.get::<Transform>().unwrap();
+        dbg!(transform.translation);
+    }
+    app.update();
+
+    {
+        let creature_ref = app.world.get_entity(creature_entity).unwrap();
+        let transform = creature_ref.get::<Transform>().unwrap();
+        dbg!(transform.translation);
+    }
+    app.update();
+
+    {
+        let creature_ref = app.world.get_entity(creature_entity).unwrap();
+        let transform = creature_ref.get::<Transform>().unwrap();
+        dbg!(transform.translation);
+    }
+    app.update();
+
+    {
+        let creature_ref = app.world.get_entity(creature_entity).unwrap();
+        let transform = creature_ref.get::<Transform>().unwrap();
+        dbg!(transform.translation);
+    }
 }
