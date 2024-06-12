@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 pub struct Controllable;
 
 pub fn control(

@@ -1,17 +1,17 @@
-#![allow(unused_imports)]
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use game::{
-    app_with_render, app_without_render,
     config::ConfigRes,
     game_logic::entities::{
         creature::{Creature, CreatureBundle, Nutrition},
         fruit::{Fruit, FruitBundle},
     },
-    render::controllable::Controllable,
 };
 
-fn main() {
+extern crate game;
+
+#[test]
+fn scenario() {
     let creature = CreatureBundle {
         creature: Creature,
         nutrition: Nutrition(0),
@@ -47,8 +47,7 @@ fn main() {
     app_render.world.spawn(creature);
     app_render.world.spawn(fruit);
     app_render.insert_resource(config);
-
-    app_render.run();
+    app_render.update();
 
     // app.world.query::<((), With<Creature>)>();
     // dbg!(app.world);

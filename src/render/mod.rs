@@ -18,7 +18,6 @@ impl Plugin for RenderPlugin {
     fn build(&self, app: &mut App) {
         let default_plugins = DefaultPlugins
             .build()
-            .disable::<WindowPlugin>()
             .disable::<TaskPoolPlugin>()
             .disable::<TypeRegistrationPlugin>()
             .disable::<FrameCountPlugin>()
