@@ -46,16 +46,24 @@ fn _fruit_creature_run() {
     let mut app;
     #[cfg(feature = "render")]
     {
+        debug!("Game with render");
         app = game::app_with_render();
     }
     #[cfg(not(feature = "render"))]
     {
+        debug!("Game without render");
         app = game::app_without_render();
     }
 
-    app.world.spawn(creature.clone());
+    let creature_entity = app.world.spawn(creature).id();
     app.world.spawn(fruit.clone());
     app.insert_resource(config.clone());
+
+    let mut creature_ref = app.world.get_entity_mut(creature_entity).unwrap();
+    {
+        let mut impulse = creature_ref.get_mut::<ExternalImpulse>().unwrap();
+        impulse.impulse = Vec2::new(10.0, 0.0);
+    }
 
     app.run();
 }
