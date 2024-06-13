@@ -12,6 +12,11 @@ use game::{
 };
 
 fn main() {
+    _fruit_creature_run();
+    // _fruit_creature_steps();
+}
+
+fn _fruit_creature_run() {
     let creature = CreatureBundle {
         creature: Creature,
         nutrition: Nutrition(0),
@@ -38,19 +43,102 @@ fn main() {
         bounds: Vec2::new(20.0, 20.0),
     };
 
-    // let mut app = game::app_without_render();
-    // app.world.spawn(creature.clone());
-    // app.world.spawn(fruit.clone());
-    // app.insert_resource(config.clone());
-    // app.update();
+    let mut app;
+    #[cfg(feature = "render")]
+    {
+        app = game::app_with_render();
+    }
+    #[cfg(not(feature = "render"))]
+    {
+        app = game::app_without_render();
+    }
 
-    let mut app_render = game::app_with_render();
-    app_render.world.spawn(creature);
-    app_render.world.spawn(fruit);
-    app_render.insert_resource(config);
+    app.world.spawn(creature.clone());
+    app.world.spawn(fruit.clone());
+    app.insert_resource(config.clone());
 
-    app_render.run();
+    app.run();
+}
 
-    // app.world.query::<((), With<Creature>)>();
-    // dbg!(app.world);
+fn _fruit_creature_steps() {
+    let creature = CreatureBundle {
+        creature: Creature,
+        nutrition: Nutrition(0),
+        collider: Collider::ball(1.0),
+        rigid_body: RigidBody::Dynamic,
+        active_events: ActiveEvents::COLLISION_EVENTS,
+        transform: TransformBundle {
+            local: Transform::from_xyz(3.0, 3.0, 0.0),
+            ..Default::default()
+        },
+        impulse: ExternalImpulse::default(),
+    };
+    let fruit = FruitBundle {
+        fruit: Fruit,
+        collider: Collider::cuboid(1.0, 1.0),
+        rigid_body: RigidBody::Dynamic,
+        active_events: ActiveEvents::COLLISION_EVENTS,
+        transform: TransformBundle {
+            local: Transform::from_xyz(10.0, 10.0, 0.0),
+            ..Default::default()
+        },
+    };
+    let config = ConfigRes {
+        bounds: Vec2::new(20.0, 20.0),
+    };
+
+    let mut app;
+    #[cfg(feature = "render")]
+    {
+        app = game::app_with_render();
+        panic!("You cannot render when doing step by step")
+    }
+    #[cfg(not(feature = "render"))]
+    {
+        app = game::app_without_render();
+    }
+
+    let creature_entity = app.world.spawn(creature).id();
+    app.world.spawn(fruit);
+    app.insert_resource(config);
+
+    app.update();
+
+    {
+        let creature_ref = app.world.get_entity(creature_entity).unwrap();
+        let transform = creature_ref.get::<Transform>().unwrap();
+        dbg!(transform.translation);
+    }
+    app.update();
+
+    {
+        let mut creature_ref = app.world.get_entity_mut(creature_entity).unwrap();
+        {
+            let mut impulse = creature_ref.get_mut::<ExternalImpulse>().unwrap();
+            impulse.impulse = Vec2::new(10.0, 0.0);
+        }
+        let transform = creature_ref.get::<Transform>().unwrap();
+        dbg!(transform.translation);
+    }
+    app.update();
+
+    {
+        let creature_ref = app.world.get_entity(creature_entity).unwrap();
+        let transform = creature_ref.get::<Transform>().unwrap();
+        dbg!(transform.translation);
+    }
+    app.update();
+
+    {
+        let creature_ref = app.world.get_entity(creature_entity).unwrap();
+        let transform = creature_ref.get::<Transform>().unwrap();
+        dbg!(transform.translation);
+    }
+    app.update();
+
+    {
+        let creature_ref = app.world.get_entity(creature_entity).unwrap();
+        let transform = creature_ref.get::<Transform>().unwrap();
+        dbg!(transform.translation);
+    }
 }
