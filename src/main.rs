@@ -46,12 +46,12 @@ fn _fruit_creature_run() {
     let mut app;
     #[cfg(feature = "render")]
     {
-        debug!("Game with render");
+        log::debug!("Game with render");
         app = game::app_with_render();
     }
     #[cfg(not(feature = "render"))]
     {
-        debug!("Game without render");
+        log::debug!("Game without render");
         app = game::app_without_render();
     }
 

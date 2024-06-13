@@ -1,21 +1,30 @@
+use std::time::Instant;
+
 use bevy::prelude::*;
 
 use crate::game_logic::entities::creature::{Creature, Nutrition};
 
 #[derive(Resource)]
-pub struct State(u128);
+pub struct State {
+    counter: u128,
+    time: Instant,
+}
 
 pub struct StatePlugin;
 
 impl Plugin for StatePlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(State(0))
-            .add_systems(PreUpdate, update)
-            .add_systems(Update, entities);
+        app.insert_resource(State {
+            counter: 0,
+            time: Instant::now(),
+        })
+        .add_systems(PreUpdate, update)
+        .add_systems(Update, entities);
     }
 }
 
-fn entities(query: Query<(Entity, &Nutrition, &Transform), With<Creature>>) {
+fn entities(query: Query<(Entity, &Nutrition, &Transform), With<Creature>>, state: Res<State>) {
+    log::debug!("Time: {:?}", Instant::now().duration_since(state.time));
     for (entity, nutrition, transform) in query.iter() {
         log::debug!(
             "Entity: {:?}, Nutrition: {:?}, Transform: {:?}",
@@ -27,6 +36,6 @@ fn entities(query: Query<(Entity, &Nutrition, &Transform), With<Creature>>) {
 }
 
 fn update(mut state: ResMut<State>) {
-    state.0 += 1;
-    log::debug!("State: {}", state.0);
+    state.counter += 1;
+    log::debug!("State: {}", state.counter);
 }
