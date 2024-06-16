@@ -12,10 +12,6 @@ use game::{
 };
 
 fn main() {
-    _fruit_creature_run();
-}
-
-fn _fruit_creature_run() {
     #[cfg(feature = "render")]
     let mut app = game::app_with_render();
     #[cfg(not(feature = "render"))]
