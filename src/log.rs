@@ -17,12 +17,14 @@ struct CustomLayer {
 
 impl CustomLayer {
     fn new(file_path: &str) -> Self {
-        let file = OpenOptions::new()
+        let mut file = OpenOptions::new()
             .create(true)
             .write(true)
             .append(true)
             .open(file_path)
             .expect("Failed to open log file");
+
+        writeln!(file, "counter, time, pos_x, velocity").expect("Failed to write to log file");
 
         CustomLayer {
             file: Arc::new(Mutex::new(file)),
@@ -52,7 +54,7 @@ impl Plugin for CustomLogPlugin {
                     eprintln!("Failed to create logs folder: {}", err);
                 }
                 let file_path = format!(
-                    "./logs/{}.log",
+                    "./logs/{}.csv",
                     chrono::Utc::now().format("%Y-%m-%d_%H-%M-%S")
                 );
 

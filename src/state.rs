@@ -1,6 +1,7 @@
 use std::time::Instant;
 
 use bevy::prelude::*;
+use bevy_rapier2d::dynamics::Velocity;
 
 use crate::game_logic::entities::creature::{Creature, Nutrition};
 
@@ -23,19 +24,26 @@ impl Plugin for StatePlugin {
     }
 }
 
-fn entities(query: Query<(Entity, &Nutrition, &Transform), With<Creature>>, state: Res<State>) {
-    log::debug!("Time: {:?}", Instant::now().duration_since(state.time));
-    for (entity, nutrition, transform) in query.iter() {
-        log::debug!(
-            "Entity: {:?}, Nutrition: {:?}, Transform: {:?}",
-            entity,
-            nutrition,
-            transform
-        );
+fn entities(
+    query: Query<(&Transform, &Velocity), With<Creature>>,
+    state: Res<State>,
+    time: Res<Time>,
+) {
+    let mut trans: &Transform = &Transform::default();
+    let mut vel: &Velocity = &Velocity::default();
+    for props in query.iter() {
+        trans = props.0;
+        vel = props.1
     }
+    log::debug!(
+        "{:?}, {:?}, {:?}, {:?}",
+        state.counter,
+        time.elapsed_seconds(),
+        trans.translation.x,
+        vel.linvel.x
+    );
 }
 
 fn update(mut state: ResMut<State>) {
     state.counter += 1;
-    log::debug!("State: {}", state.counter);
 }

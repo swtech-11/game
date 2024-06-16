@@ -24,13 +24,14 @@ fn _fruit_creature_run() {
     app.world.spawn(CreatureBundle {
         creature: Creature,
         nutrition: Nutrition(0),
-        collider: Collider::ball(1.0),
+        collider: Collider::cuboid(0.5, 0.5),
         rigid_body: RigidBody::Dynamic,
         active_events: ActiveEvents::COLLISION_EVENTS,
         transform: TransformBundle {
             local: Transform::from_xyz(0.0, 0.0, 0.0),
             ..Default::default()
         },
+        velocity: Velocity::default(),
         impulse: ExternalImpulse {
             impulse: Vec2::new(1.0, 0.0),
             ..Default::default()

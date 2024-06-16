@@ -16,4 +16,5 @@ pub struct CreatureBundle {
     pub active_events: ActiveEvents,
     pub transform: TransformBundle,
     pub impulse: ExternalImpulse,
+    pub velocity: Velocity,
 }
