@@ -2,6 +2,7 @@ use bevy::prelude::*;
 use game_logic::GameLogicPlugin;
 use log::CustomLogPlugin;
 use physics_engine::PhysicsEnginePlugin;
+use render::RenderPlugin;
 use state::StatePlugin;
 
 pub mod config;
@@ -19,6 +20,6 @@ pub fn app() -> App {
         .add_plugins(CustomLogPlugin)
         .add_plugins(StatePlugin)
         .add_plugins(PhysicsEnginePlugin)
-        .add_plugins(render::RenderPlugin);
+        .add_plugins(RenderPlugin);
     app
 }

@@ -12,7 +12,6 @@ use game::{
 
 fn main() {
     _fruit_creature_run();
-    // _fruit_creature_steps();
 }
 
 fn _fruit_creature_run() {
