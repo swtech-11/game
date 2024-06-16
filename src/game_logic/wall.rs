@@ -11,40 +11,53 @@ impl Plugin for WallPlugin {
 }
 
 fn setup(mut commands: Commands, config: Res<ConfigRes>) {
+    const WALL_THICKNESS: f32 = 1.0;
+    let min_x = config.bounds.0.x;
+    let max_x = config.bounds.1.x;
+    let min_y = config.bounds.0.y;
+    let max_y = config.bounds.1.y;
+
     commands
         .spawn(Sensor)
         .insert(TransformBundle::default())
         .with_children(|children| {
+            // Left Wall
             children
-                .spawn(Collider::cuboid(1.0, config.bounds.y / 2.0))
+                .spawn(Collider::cuboid(WALL_THICKNESS, (max_y - min_y) / 2.0))
                 .insert(Name::new("Wall Left"))
                 .insert(TransformBundle::from(Transform::from_xyz(
-                    0.0 - 1.0,
-                    config.bounds.y / 2.0,
+                    min_x - WALL_THICKNESS,
+                    (max_y + min_y) / 2.0,
                     0.0,
                 )));
+
+            // Right Wall
             children
-                .spawn(Collider::cuboid(1.0, config.bounds.y / 2.0))
+                .spawn(Collider::cuboid(WALL_THICKNESS, (max_y - min_y) / 2.0))
                 .insert(Name::new("Wall Right"))
                 .insert(TransformBundle::from(Transform::from_xyz(
-                    config.bounds.x + 1.0,
-                    config.bounds.y / 2.0,
+                    max_x + WALL_THICKNESS,
+                    (max_y + min_y) / 2.0,
                     0.0,
                 )));
+
+            // Bottom Wall
             children
-                .spawn(Collider::cuboid(config.bounds.x / 2.0, 1.0))
+                .spawn(Collider::cuboid((max_x - min_x) / 2.0, WALL_THICKNESS))
                 .insert(Name::new("Wall Bottom"))
                 .insert(TransformBundle::from(Transform::from_xyz(
-                    config.bounds.x / 2.0,
-                    0.0 - 1.0,
+                    (max_x + min_x) / 2.0,
+                    min_y - WALL_THICKNESS,
                     0.0,
                 )));
+
+            // Top Wall
             children
-                .spawn(Collider::cuboid(config.bounds.x / 2.0, 1.0))
+                .spawn(Collider::cuboid((max_x - min_x) / 2.0, WALL_THICKNESS))
                 .insert(Name::new("Wall Top"))
                 .insert(TransformBundle::from(Transform::from_xyz(
-                    config.bounds.x / 2.0,
-                    config.bounds.y + 1.0,
+                    (max_x + min_x) / 2.0,
+                    max_y + WALL_THICKNESS,
                     0.0,
                 )));
         });

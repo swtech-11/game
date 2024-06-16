@@ -20,7 +20,11 @@ fn setup(mut commands: Commands, config: Res<ConfigRes>) {
                 scale: 0.05,
                 ..default()
             },
-            transform: Transform::from_xyz(config.bounds.x / 2.0, config.bounds.y / 2.0, 0.0),
+            transform: Transform::from_xyz(
+                (config.bounds.0.x + config.bounds.1.x) / 2.0,
+                (config.bounds.0.y + config.bounds.1.y) / 2.0,
+                0.0,
+            ),
             ..default()
         })
         .insert(PanCam::default());
