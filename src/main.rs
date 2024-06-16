@@ -2,6 +2,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use game::{
+    app_with_render, app_without_render,
     config::ConfigRes,
     game_logic::entities::{
         creature::{Creature, CreatureBundle, Nutrition},
@@ -15,7 +16,10 @@ fn main() {
 }
 
 fn _fruit_creature_run() {
-    let mut app = game::app();
+    #[cfg(feature = "render")]
+    let mut app = game::app_with_render();
+    #[cfg(not(feature = "render"))]
+    let mut app = game::app_without_render();
 
     app.insert_resource(ConfigRes {
         bounds: (Vec2::new(-20.0, -20.0), Vec2::new(20.0, 20.0)),
