@@ -28,7 +28,7 @@ fn _fruit_creature_run() {
         rigid_body: RigidBody::Dynamic,
         active_events: ActiveEvents::COLLISION_EVENTS,
         transform: TransformBundle {
-            local: Transform::from_xyz(3.0, 3.0, 0.0),
+            local: Transform::from_xyz(0.0, 0.0, 0.0),
             ..Default::default()
         },
         impulse: ExternalImpulse {
