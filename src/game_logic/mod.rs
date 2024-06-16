@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use entities::{
     creature::{Creature, Nutrition},
-    fruit::Fruit,
+    fruit::{Fruit, FruitBundle},
 };
 use physics::PhysicsPlugin;
 use wall::WallPlugin;
@@ -50,6 +50,15 @@ fn eat(
                 commands
                     .entity(creature.0)
                     .insert(Nutrition(creature.1 .0 + 1));
+                debug!("Creature {:?} ate a fruit {:?}", creature.0, fruit);
+
+                commands.spawn(FruitBundle {
+                    transform: TransformBundle {
+                        local: Transform::from_xyz(10.0, 10.0, 0.0),
+                        ..Default::default()
+                    },
+                    ..Default::default()
+                });
             }
             _ => (),
         }

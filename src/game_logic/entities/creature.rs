@@ -18,3 +18,18 @@ pub struct CreatureBundle {
     pub impulse: ExternalImpulse,
     pub velocity: Velocity,
 }
+
+impl Default for CreatureBundle {
+    fn default() -> Self {
+        Self {
+            creature: Creature,
+            nutrition: Nutrition(0),
+            collider: Collider::cuboid(0.5, 0.5),
+            rigid_body: RigidBody::Dynamic,
+            active_events: ActiveEvents::COLLISION_EVENTS,
+            transform: TransformBundle::default(),
+            impulse: ExternalImpulse::default(),
+            velocity: Velocity::default(),
+        }
+    }
+}
