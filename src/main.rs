@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use bevy_rapier2d::prelude::*;
 use game::{
     config::ConfigRes,
     game_logic::entities::{creature::CreatureBundle, fruit::FruitBundle},
