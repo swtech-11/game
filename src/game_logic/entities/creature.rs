@@ -24,7 +24,7 @@ impl Default for CreatureBundle {
         Self {
             creature: Creature,
             nutrition: Nutrition(0),
-            collider: Collider::cuboid(0.5, 0.5),
+            collider: Collider::ball(0.5),
             rigid_body: RigidBody::Dynamic,
             active_events: ActiveEvents::COLLISION_EVENTS,
             transform: TransformBundle::default(),

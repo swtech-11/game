@@ -7,6 +7,8 @@ use entities::{
 use physics::PhysicsPlugin;
 use wall::WallPlugin;
 
+use crate::{config::ConfigRes, rng::rand_float};
+
 pub mod entities;
 mod physics;
 mod wall;
@@ -26,6 +28,7 @@ fn eat(
     mut collision_events: EventReader<CollisionEvent>,
     creature_query: Query<(Entity, &Nutrition), With<Creature>>,
     fruit_query: Query<(), With<Fruit>>,
+    config: Res<ConfigRes>,
 ) {
     for collision_event in collision_events.read() {
         match collision_event {
@@ -54,7 +57,11 @@ fn eat(
 
                 commands.spawn(FruitBundle {
                     transform: TransformBundle {
-                        local: Transform::from_xyz(10.0, 10.0, 0.0),
+                        local: Transform::from_xyz(
+                            rand_float(config.bounds.0.x, config.bounds.1.x),
+                            rand_float(config.bounds.0.y, config.bounds.1.y),
+                            0.0,
+                        ),
                         ..Default::default()
                     },
                     ..Default::default()

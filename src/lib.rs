@@ -9,7 +9,7 @@ pub mod game_logic;
 mod logs;
 mod physics_engine;
 pub mod render;
-mod rng;
+pub mod rng;
 
 fn app() -> App {
     let mut app = App::new();
