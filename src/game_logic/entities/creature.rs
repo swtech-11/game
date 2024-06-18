@@ -1,13 +1,32 @@
+use super::Health;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use super::Health;
+pub struct CreaturePlugin;
+
+impl Plugin for CreaturePlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Update, action);
+    }
+}
 
 #[derive(Component, Clone, Debug)]
 pub struct Creature;
 
 #[derive(Component, Debug, Clone)]
 pub struct Nutrition(pub u8);
+
+#[derive(Component, Clone, Debug)]
+pub struct ActionState {
+    pub current_action: Option<Action>,
+}
+
+#[derive(Clone, Debug)]
+pub enum Action {
+    MoveForward,
+    TurnLeft,
+    TurnRight,
+}
 
 #[derive(Bundle, Clone, Debug)]
 pub struct CreatureBundle {
@@ -21,6 +40,7 @@ pub struct CreatureBundle {
     pub velocity: Velocity,
     pub health: Health,
     pub damping: Damping,
+    pub action_state: ActionState,
 }
 
 impl Default for CreatureBundle {
@@ -39,6 +59,30 @@ impl Default for CreatureBundle {
                 linear_damping: 0.5,
                 angular_damping: 1.0,
             },
+            action_state: ActionState {
+                current_action: None,
+            },
         }
+    }
+}
+
+fn action(
+    mut query: Query<(&mut Transform, &mut ExternalImpulse, &mut ActionState), With<Creature>>,
+) {
+    for (mut transform, mut impulse, mut action_state) in query.iter_mut() {
+        match action_state.current_action {
+            Some(Action::MoveForward) => {
+                let forward = transform.rotation.mul_vec3(Vec3::X);
+                impulse.impulse = forward.xy() * 1.0;
+            }
+            Some(Action::TurnLeft) => {
+                transform.rotate(Quat::from_rotation_z(0.05));
+            }
+            Some(Action::TurnRight) => {
+                transform.rotate(Quat::from_rotation_z(-0.05));
+            }
+            None => {}
+        }
+        action_state.current_action = None;
     }
 }

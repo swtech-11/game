@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use entities::{
-    creature::{Creature, Nutrition},
+    creature::{Creature, CreaturePlugin, Nutrition},
     fruit::{Fruit, FruitBundle},
 };
 use wall::WallPlugin;
@@ -15,7 +15,9 @@ pub struct GameLogicPlugin;
 
 impl Plugin for GameLogicPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, eat).add_plugins(WallPlugin);
+        app.add_plugins(CreaturePlugin)
+            .add_systems(Update, eat)
+            .add_plugins(WallPlugin);
     }
 }
 
