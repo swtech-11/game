@@ -4,22 +4,18 @@ use entities::{
     creature::{Creature, Nutrition},
     fruit::{Fruit, FruitBundle},
 };
-use physics::PhysicsPlugin;
 use wall::WallPlugin;
 
 use crate::{config::ConfigRes, rng::rand_float};
 
 pub mod entities;
-mod physics;
 mod wall;
 
 pub struct GameLogicPlugin;
 
 impl Plugin for GameLogicPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins(PhysicsPlugin)
-            .add_systems(Update, eat)
-            .add_plugins(WallPlugin);
+        app.add_systems(Update, eat).add_plugins(WallPlugin);
     }
 }
 

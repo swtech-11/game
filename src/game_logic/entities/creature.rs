@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+use super::Health;
+
 #[derive(Component, Clone, Debug)]
 pub struct Creature;
 
@@ -17,6 +19,8 @@ pub struct CreatureBundle {
     pub transform: TransformBundle,
     pub impulse: ExternalImpulse,
     pub velocity: Velocity,
+    pub health: Health,
+    pub damping: Damping,
 }
 
 impl Default for CreatureBundle {
@@ -30,6 +34,11 @@ impl Default for CreatureBundle {
             transform: TransformBundle::default(),
             impulse: ExternalImpulse::default(),
             velocity: Velocity::default(),
+            health: Health(100),
+            damping: Damping {
+                linear_damping: 0.5,
+                angular_damping: 1.0,
+            },
         }
     }
 }
