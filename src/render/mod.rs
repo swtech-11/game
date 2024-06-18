@@ -22,6 +22,7 @@ impl Plugin for RenderPlugin {
             .disable::<TypeRegistrationPlugin>()
             .disable::<FrameCountPlugin>()
             .disable::<TimePlugin>()
+            .disable::<WindowPlugin>()
             .disable::<LogPlugin>();
         app.add_plugins(default_plugins)
             .add_plugins(WorldInspectorPlugin::default())
