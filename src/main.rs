@@ -2,6 +2,7 @@ use bevy::prelude::*;
 use game::{
     config::ConfigRes,
     game_logic::entities::{creature::CreatureBundle, fruit::FruitBundle},
+    render::controllable::Controllable,
     rng::rand_float,
 };
 
@@ -24,17 +25,19 @@ fn main() {
 
     app.insert_resource(config.clone());
 
-    app.world.spawn(CreatureBundle {
-        transform: TransformBundle {
-            local: Transform::from_xyz(
-                rand_float(config.bounds.0.x, config.bounds.1.x),
-                rand_float(config.bounds.0.y, config.bounds.1.y),
-                0.0,
-            ),
+    app.world
+        .spawn(CreatureBundle {
+            transform: TransformBundle {
+                local: Transform::from_xyz(
+                    rand_float(config.bounds.0.x, config.bounds.1.x),
+                    rand_float(config.bounds.0.y, config.bounds.1.y),
+                    0.0,
+                ),
+                ..Default::default()
+            },
             ..Default::default()
-        },
-        ..Default::default()
-    });
+        })
+        .insert(Controllable);
     app.world.spawn(FruitBundle {
         transform: TransformBundle {
             local: Transform::from_xyz(

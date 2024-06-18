@@ -6,28 +6,20 @@ pub struct Controllable;
 
 pub fn control(
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    query: Query<Entity, With<Controllable>>,
+    mut query: Query<(&mut Transform, &mut ExternalImpulse), With<Controllable>>,
     mut commands: Commands,
 ) {
-    for entity in query.iter() {
-        let mut impulse = Vec2::ZERO;
-
-        if keyboard_input.just_pressed(KeyCode::ArrowLeft) {
-            impulse.x -= 10.0;
+    for mut entity in query.iter_mut() {
+        if keyboard_input.pressed(KeyCode::ArrowLeft) {
+            entity.0.rotate(Quat::from_rotation_z(0.05));
         }
-        if keyboard_input.just_pressed(KeyCode::ArrowRight) {
-            impulse.x += 10.0;
+        if keyboard_input.pressed(KeyCode::ArrowRight) {
+            entity.0.rotate(Quat::from_rotation_z(-0.05));
         }
         if keyboard_input.just_pressed(KeyCode::ArrowUp) {
-            impulse.y += 10.0;
+            let rotation = entity.0.rotation;
+            let forward = rotation.mul_vec3(Vec3::X);
+            entity.1.impulse = forward.xy() * 1.0;
         }
-        if keyboard_input.just_pressed(KeyCode::ArrowDown) {
-            impulse.y -= 10.0;
-        }
-
-        commands.entity(entity).insert(ExternalImpulse {
-            impulse,
-            ..Default::default()
-        });
     }
 }
