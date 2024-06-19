@@ -1,7 +1,9 @@
 use bevy::prelude::*;
 use game::{
-    config::ConfigRes,
-    game_logic::entities::{creature::CreatureBundle, fruit::FruitBundle},
+    game_logic::{
+        entities::{creature::CreatureBundle, fruit::FruitBundle},
+        ConfigRes,
+    },
     render::controllable::Controllable,
     rng::rand_float,
 };

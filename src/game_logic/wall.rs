@@ -1,7 +1,8 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::config::ConfigRes;
+use super::ConfigRes;
+
 pub struct WallPlugin;
 
 impl Plugin for WallPlugin {

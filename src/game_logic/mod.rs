@@ -1,3 +1,4 @@
+use ai::AIPlugin;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use entities::{
@@ -6,8 +7,9 @@ use entities::{
 };
 use wall::WallPlugin;
 
-use crate::{config::ConfigRes, rng::rand_float};
+use crate::rng::rand_float;
 
+mod ai;
 pub mod entities;
 mod wall;
 
@@ -16,9 +18,15 @@ pub struct GameLogicPlugin;
 impl Plugin for GameLogicPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(CreaturePlugin)
+            .add_plugins(AIPlugin)
             .add_systems(Update, eat)
             .add_plugins(WallPlugin);
     }
+}
+
+#[derive(Resource, Clone)]
+pub struct ConfigRes {
+    pub bounds: (Vec2, Vec2),
 }
 
 fn eat(

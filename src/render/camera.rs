@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_pancam::{PanCam, PanCamPlugin};
 
-use crate::config::ConfigRes;
+use crate::game_logic::ConfigRes;
 
 pub struct CameraPlugin;
 
