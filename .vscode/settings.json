@@ -1,10 +1,7 @@
 {
   "rust-analyzer.cargo.features": ["render"],
-  "rust-analyzer.cargo.extraEnv": {
-    "LIBTORCH": "${workspaceFolder}/libtorch"
-  },
+  "rust-analyzer.cargo.extraEnv": {},
   "rust-analyzer.runnables.extraEnv": {
-    "LIBTORCH": "${workspaceFolder}/libtorch",
     "RUST_LOG": "game=debug"
     // "RUST_LOG": "game=info"
   }
