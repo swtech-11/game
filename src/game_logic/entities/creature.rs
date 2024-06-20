@@ -18,11 +18,11 @@ pub struct Nutrition(pub u8);
 
 #[derive(Component, Clone, Debug)]
 pub struct ActionState {
-    pub current_action: Option<Action>,
+    pub current_action: Option<CreatureAction>,
 }
 
 #[derive(Clone, Debug)]
-pub enum Action {
+pub enum CreatureAction {
     MoveForward,
     TurnLeft,
     TurnRight,
@@ -71,14 +71,14 @@ fn action(
 ) {
     for (mut transform, mut impulse, mut action_state) in query.iter_mut() {
         match action_state.current_action {
-            Some(Action::MoveForward) => {
+            Some(CreatureAction::MoveForward) => {
                 let forward = transform.rotation.mul_vec3(Vec3::X);
                 impulse.impulse = forward.xy() * 1.0;
             }
-            Some(Action::TurnLeft) => {
+            Some(CreatureAction::TurnLeft) => {
                 transform.rotate(Quat::from_rotation_z(0.05));
             }
-            Some(Action::TurnRight) => {
+            Some(CreatureAction::TurnRight) => {
                 transform.rotate(Quat::from_rotation_z(-0.05));
             }
             None => {}

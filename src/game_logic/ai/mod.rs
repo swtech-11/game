@@ -3,6 +3,9 @@ use bevy_rapier2d::prelude::*;
 
 use super::entities::{creature::Creature, fruit::Fruit};
 
+mod dqn;
+mod replay_buffer;
+
 pub struct AIPlugin;
 
 impl Plugin for AIPlugin {
@@ -11,6 +14,7 @@ impl Plugin for AIPlugin {
     }
 }
 
+#[derive(Clone)]
 struct CreatureState {
     velocity: Velocity,
     transform: Transform,
