@@ -1,40 +1,28 @@
-use crate::game_logic::entities::creature::CreatureAction;
+use rand::Rng;
 
-use super::CreatureState;
-
-pub struct ReplayBuffer {
-    buffer: Vec<(CreatureState, CreatureAction, f32, CreatureState)>,
-    capacity: usize,
+struct ReplayBuffer {
+    buffer: Vec<(Vec<f32>, usize, f32, Vec<f32>)>,
 }
 
 impl ReplayBuffer {
-    fn new(capacity: usize) -> Self {
-        ReplayBuffer {
-            buffer: Vec::with_capacity(capacity),
-            capacity,
-        }
+    fn new() -> Self {
+        Self { buffer: Vec::new() }
     }
 
-    fn add(&mut self, experience: (CreatureState, CreatureAction, f32, CreatureState)) {
-        if self.buffer.len() >= self.capacity {
+    fn add(&mut self, experience: (Vec<f32>, usize, f32, Vec<f32>)) {
+        self.buffer.push(experience);
+        if self.buffer.len() > 1000 {
             self.buffer.remove(0);
         }
-        self.buffer.push(experience);
     }
 
-    fn sample(
-        &self,
-        batch_size: usize,
-    ) -> Vec<(CreatureState, CreatureAction, f32, CreatureState)> {
-        use rand::seq::SliceRandom;
+    fn sample(&self, batch_size: usize) -> Vec<(Vec<f32>, usize, f32, Vec<f32>)> {
         let mut rng = rand::thread_rng();
-        self.buffer
-            .choose_multiple(&mut rng, batch_size)
-            .cloned()
+        (0..batch_size)
+            .map(|_| {
+                let index = rng.gen_range(0..self.buffer.len());
+                self.buffer[index].clone()
+            })
             .collect()
-    }
-
-    fn len(&self) -> usize {
-        self.buffer.len()
     }
 }

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::game_logic::entities::creature::{CreatureAction, ActionState};
+use crate::game_logic::entities::creature::{ActionState, CreatureAction};
 
 #[derive(Component, Clone)]
 pub struct Controllable;
@@ -11,11 +11,13 @@ pub fn control(
 ) {
     for mut action_state in query.iter_mut() {
         if keyboard_input.pressed(KeyCode::ArrowLeft) {
-            action_state.current_action = Some(CreatureAction::TurnLeft);
+            action_state.current_action = CreatureAction::TurnLeft;
         } else if keyboard_input.pressed(KeyCode::ArrowRight) {
-            action_state.current_action = Some(CreatureAction::TurnRight);
+            action_state.current_action = CreatureAction::TurnRight;
         } else if keyboard_input.just_pressed(KeyCode::ArrowUp) {
-            action_state.current_action = Some(CreatureAction::MoveForward);
+            action_state.current_action = CreatureAction::MoveForward;
+        } else {
+            action_state.current_action = CreatureAction::None;
         }
     }
 }

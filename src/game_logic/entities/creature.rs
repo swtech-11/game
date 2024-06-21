@@ -1,3 +1,5 @@
+use crate::game_logic::ai::dqn::QNetwork;
+
 use super::Health;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
@@ -18,7 +20,7 @@ pub struct Nutrition(pub u8);
 
 #[derive(Component, Clone, Debug)]
 pub struct ActionState {
-    pub current_action: Option<CreatureAction>,
+    pub current_action: CreatureAction,
 }
 
 #[derive(Clone, Debug)]
@@ -26,9 +28,10 @@ pub enum CreatureAction {
     MoveForward,
     TurnLeft,
     TurnRight,
+    None,
 }
 
-#[derive(Bundle, Clone, Debug)]
+#[derive(Bundle)]
 pub struct CreatureBundle {
     pub creature: Creature,
     pub nutrition: Nutrition,
@@ -41,6 +44,7 @@ pub struct CreatureBundle {
     pub health: Health,
     pub damping: Damping,
     pub action_state: ActionState,
+    pub dqn: QNetwork,
 }
 
 impl Default for CreatureBundle {
@@ -60,8 +64,9 @@ impl Default for CreatureBundle {
                 angular_damping: 1.0,
             },
             action_state: ActionState {
-                current_action: None,
+                current_action: CreatureAction::None,
             },
+            dqn: QNetwork::new(&[5, 24, 24, 4]),
         }
     }
 }
@@ -71,18 +76,18 @@ fn action(
 ) {
     for (mut transform, mut impulse, mut action_state) in query.iter_mut() {
         match action_state.current_action {
-            Some(CreatureAction::MoveForward) => {
+            CreatureAction::MoveForward => {
                 let forward = transform.rotation.mul_vec3(Vec3::X);
                 impulse.impulse = forward.xy() * 1.0;
             }
-            Some(CreatureAction::TurnLeft) => {
+            CreatureAction::TurnLeft => {
                 transform.rotate(Quat::from_rotation_z(0.05));
             }
-            Some(CreatureAction::TurnRight) => {
+            CreatureAction::TurnRight => {
                 transform.rotate(Quat::from_rotation_z(-0.05));
             }
-            None => {}
+            CreatureAction::None => {}
         }
-        action_state.current_action = None;
+        action_state.current_action = CreatureAction::None;
     }
 }
