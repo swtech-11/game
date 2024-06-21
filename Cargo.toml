@@ -17,7 +17,6 @@ chrono = "0.4.38"
 dirs = "5.0.1"
 log = "0.4.21"
 rand = "0.8.5"
-tch = "0.16.0"
 
 # Enable a small amount of optimization in debug mode
 [profile.dev]
