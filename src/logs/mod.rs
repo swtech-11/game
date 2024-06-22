@@ -32,6 +32,7 @@ impl Plugin for CustomLogPlugin {
         });
 
         app.add_plugins(LogPlugin {
+            level: bevy::log::Level::DEBUG,
             update_subscriber: Some(|subscriber| {
                 let dir = format!("./logs/{}", chrono::Utc::now().format("%Y-%m-%d_%H-%M-%S"));
                 let log_file_path = format!("{}/log.log", dir);
