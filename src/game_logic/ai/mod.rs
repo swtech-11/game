@@ -105,17 +105,15 @@ fn decision(
             -0.1 // Penalty for not getting closer to the fruit
         };
 
-        // Define the next state
-        let next_state = vec![
-            creature_velocity.linvel.x,
-            creature_velocity.linvel.y,
-            new_distance_to_fruit,
-            creature_transform.translation.x,
-            creature_transform.translation.y,
-        ];
+        let next_state = CreatureState {
+            distance_to_fruit,
+            creature_pos_x: creature_transform.translation.x,
+            creature_pos_y: creature_transform.translation.y,
+            creature_rot: creature_transform.rotation.z,
+        };
 
         // Store the experience in the replay buffer
-        q_network.add_experience((state.to_vec(), action, reward, next_state));
+        q_network.add_experience((state.to_vec(), action, reward, next_state.to_vec()));
 
         // Train the Q-network
         q_network.train(BATCH_SIZE, ALPHA, GAMMA);
