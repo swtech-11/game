@@ -22,23 +22,24 @@ impl Plugin for AIPlugin {
     }
 }
 
+// For now, this is okayish because is temporary and I don't know how the final creatures will look like
 fn load_creature_brains(mut commands: Commands, creature_query: Query<Entity, With<Creature>>) {
     let dqns = load_qnetwork_from_file();
 
     if dqns.is_empty() {
-        warn!("No brains found in the brain directory");
+        warn!("No brains found in the brain directory. This means you are starting with a blank slate.");
         return;
     }
 
     let mut count = 0;
     for entity in creature_query.iter() {
+        if dqns.is_empty() {
+            commands.entity(entity).insert(QNetwork::new(&[5, 24, 4]));
+        }
         commands.entity(entity).insert(dqns[count].clone());
         count += 1;
     }
 }
-// pub dqn: QNetwork,
-// let name = Name::new("1".to_string());
-// dqn: load_qnetwork_from_file(name.to_string()),
 
 const ALPHA: f32 = 0.001;
 const GAMMA: f32 = 0.99;
