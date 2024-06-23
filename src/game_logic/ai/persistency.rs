@@ -7,6 +7,25 @@ use super::dqn::QNetwork;
 
 const BRAIN_DIR: &str = "brain";
 
+// For now, this is okayish because is temporary and I don't know how the final creatures will look like
+pub fn load_creature_brains(mut commands: Commands, creature_query: Query<Entity, With<Creature>>) {
+    let dqns = load_qnetwork_from_file();
+
+    if dqns.is_empty() {
+        warn!("No brains found in the brain directory. This means you are starting with a blank slate.");
+    }
+
+    let mut count = 0;
+    for entity in creature_query.iter() {
+        if dqns.is_empty() {
+            commands.entity(entity).insert(QNetwork::new(&[4, 24, 4]));
+            continue;
+        }
+        commands.entity(entity).insert(dqns[count].clone());
+        count += 1;
+    }
+}
+
 pub fn load_qnetwork_from_file() -> Vec<QNetwork> {
     for entry in fs::read_dir(BRAIN_DIR).unwrap() {
         let entry = entry.unwrap();

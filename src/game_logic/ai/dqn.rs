@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
-#[derive(Component, Serialize, Deserialize, Clone)]
+#[derive(Component, Serialize, Deserialize, Clone, Debug)]
 pub struct QNetwork {
     layers: Vec<Layer>,
     #[serde(skip)] // Skip replay buffer in serialization
@@ -69,7 +69,7 @@ impl QNetwork {
     }
 }
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
 struct Layer {
     weights: Vec<Vec<f32>>,
     biases: Vec<f32>,
