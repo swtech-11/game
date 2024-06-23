@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
+use creature_state::CreatureState;
 use dqn::QNetwork;
 use persistency::{load_qnetwork_from_file, save_periodically};
 use rand::Rng;
@@ -9,6 +10,7 @@ use super::entities::{
     fruit::Fruit,
 };
 
+mod creature_state;
 pub mod dqn;
 mod persistency;
 
@@ -73,19 +75,18 @@ fn decision(
         }
 
         // Define the current state
-        let state = vec![
-            creature_velocity.linvel.x,
-            creature_velocity.linvel.y,
+        let state = CreatureState {
             distance_to_fruit,
-            creature_transform.translation.x,
-            creature_transform.translation.y,
-        ];
+            creature_pos_x: creature_transform.translation.x,
+            creature_pos_y: creature_transform.translation.y,
+            creature_rot: creature_transform.rotation.z,
+        };
 
         // Choose an action based on the epsilon-greedy policy
         let action = if rng.gen::<f32>() < EPSILON {
             rng.gen_range(0..4) // Explore: random action
         } else {
-            let q_values = q_network.forward(state.clone());
+            let q_values = q_network.forward(state.to_vec());
             q_values
                 .iter()
                 .enumerate()
@@ -133,7 +134,7 @@ fn decision(
         ];
 
         // Store the experience in the replay buffer
-        q_network.add_experience((state, action, reward, next_state));
+        q_network.add_experience((state.to_vec(), action, reward, next_state));
 
         // Train the Q-network
         q_network.train(BATCH_SIZE, ALPHA, GAMMA);
