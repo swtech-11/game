@@ -4,7 +4,7 @@ use dqn::QNetwork;
 use rand::Rng;
 
 use super::entities::{
-    creature::{Creature, CreatureAction},
+    creature::{ActionState, Creature, CreatureAction},
     fruit::Fruit,
 };
 
@@ -25,11 +25,16 @@ const EPSILON: f32 = 0.1;
 const BATCH_SIZE: usize = 32;
 
 fn decision(
-    mut creature_query: Query<(&mut Transform, &Velocity, &mut QNetwork), With<Creature>>,
+    mut creature_query: Query<
+        (&mut Transform, &Velocity, &mut QNetwork, &mut ActionState),
+        With<Creature>,
+    >,
     fruit_query: Query<&Transform, (With<Fruit>, Without<Creature>)>,
 ) {
     let mut rng = rand::thread_rng();
-    for (mut creature_transform, creature_velocity, mut q_network) in creature_query.iter_mut() {
+    for (creature_transform, creature_velocity, mut q_network, mut action_state) in
+        creature_query.iter_mut()
+    {
         // Find the closest fruit
         let mut closest_fruit_position = Vec2::ZERO;
         let mut distance_to_fruit = f32::INFINITY;
@@ -76,24 +81,13 @@ fn decision(
             _ => CreatureAction::None,
         };
 
-        // Apply the action
         match creature_action {
             CreatureAction::MoveForward => {
-                // Move the creature forward
-                let forward_direction = creature_transform.rotation * Vec3::Y;
-                creature_transform.translation += forward_direction * 0.1; // Move forward by 0.1 units
+                action_state.current_action = CreatureAction::MoveForward
             }
-            CreatureAction::TurnLeft => {
-                // Rotate the creature left
-                creature_transform.rotate(Quat::from_rotation_z(0.1)); // Rotate by 0.1 radians
-            }
-            CreatureAction::TurnRight => {
-                // Rotate the creature right
-                creature_transform.rotate(Quat::from_rotation_z(-0.1)); // Rotate by -0.1 radians
-            }
-            CreatureAction::None => {
-                // Do nothing
-            }
+            CreatureAction::TurnLeft => action_state.current_action = CreatureAction::TurnLeft,
+            CreatureAction::TurnRight => action_state.current_action = CreatureAction::TurnRight,
+            CreatureAction::None => action_state.current_action = CreatureAction::None,
         }
 
         // Calculate the reward based on the new distance to the closest fruit
