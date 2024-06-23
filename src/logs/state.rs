@@ -15,19 +15,20 @@ pub struct StatePlugin {
 
 impl Plugin for StatePlugin {
     fn build(&self, app: &mut App) {
-        let file = Arc::new(Mutex::new(
-            OpenOptions::new()
-                .create(true)
-                .write(true)
-                .append(true)
-                .open(self.file_path.clone())
-                .expect("Failed to open log file"),
-        ));
+        let file = match OpenOptions::new()
+            .create(true)
+            .write(true)
+            .append(true)
+            .open(&self.file_path)
+        {
+            Ok(file) => Arc::new(Mutex::new(file)),
+            Err(e) => {
+                eprintln!("Failed to open log file: {}", e);
+                return;
+            }
+        };
 
-        app.insert_resource(StateLog {
-            file: file.clone(),
-            counter: 0,
-        });
+        app.insert_resource(StateLog { file, counter: 0 });
 
         app.add_systems(Startup, write_headers)
             .add_systems(PreUpdate, update_counter)
@@ -41,17 +42,25 @@ struct StateLog {
     counter: u128,
 }
 
+const HEADERS: &[&str] = &[
+    "counter",
+    "time",
+    "pos_x",
+    "pos_y",
+    "rot_x",
+    "rot_y",
+    "rot_z",
+    "velocity_linvel_x",
+    "velocity_linvel_y",
+    "velocity_angvel",
+    "nutrition",
+];
+
 fn write_headers(state_log: ResMut<StateLog>) {
-    writeln!(
-        state_log.file.lock().unwrap(),
-        "{}, {}, {}, {}, {}",
-        "counter",
-        "time",
-        "pos_x",
-        "velocity",
-        "nutrition"
-    )
-    .expect("Failed to write to log file");
+    let header_line = HEADERS.join(", ");
+    if let Err(e) = writeln!(state_log.file.lock().unwrap(), "{}", header_line) {
+        eprintln!("Failed to write headers to log file: {}", e);
+    }
 }
 
 fn write_entities(
@@ -59,21 +68,26 @@ fn write_entities(
     state_log: Res<StateLog>,
     time: Res<Time>,
 ) {
-    for props in query.iter() {
-        let trans = props.0;
-        let vel = props.1;
-        let nut = props.2;
+    let mut file = state_log.file.lock().unwrap();
+    for (transform, velocity, nutrition) in query.iter() {
+        let data = [
+            state_log.counter.to_string(),
+            time.elapsed_seconds().to_string(),
+            transform.translation.x.to_string(),
+            transform.translation.y.to_string(),
+            transform.rotation.x.to_string(),
+            transform.rotation.y.to_string(),
+            transform.rotation.z.to_string(),
+            velocity.linvel.x.to_string(),
+            velocity.linvel.y.to_string(),
+            velocity.angvel.to_string(),
+            nutrition.0.to_string(),
+        ];
+        let data_line = data.join(", ");
 
-        writeln!(
-            state_log.file.lock().unwrap(),
-            "{}, {}, {}, {}, {}",
-            state_log.counter,
-            time.elapsed_seconds(),
-            trans.translation.x,
-            vel.linvel.x,
-            nut.0
-        )
-        .expect("Failed to write to state log file");
+        if let Err(e) = writeln!(file, "{}", data_line) {
+            eprintln!("Failed to write entity state to log file: {}", e);
+        }
     }
 }
 
