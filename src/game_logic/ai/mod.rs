@@ -9,7 +9,6 @@ use super::entities::{
 };
 
 pub mod dqn;
-pub mod replay_buffer;
 
 pub struct AIPlugin;
 
