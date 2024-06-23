@@ -1,17 +1,12 @@
 use super::Health;
-use crate::game_logic::ai::dqn::QNetwork;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
-use std::fs;
-
-const BRAIN_DIR: &str = "brain";
 
 pub struct CreaturePlugin;
 
 impl Plugin for CreaturePlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, action)
-            .add_systems(PostUpdate, save_periodically);
+        app.add_systems(Update, action);
     }
 }
 
@@ -47,13 +42,10 @@ pub struct CreatureBundle {
     pub health: Health,
     pub damping: Damping,
     pub action_state: ActionState,
-    pub dqn: QNetwork,
-    pub name: Name,
 }
 
 impl Default for CreatureBundle {
     fn default() -> Self {
-        let name = Name::new("1".to_string());
         Self {
             creature: Creature,
             nutrition: Nutrition(0),
@@ -71,8 +63,6 @@ impl Default for CreatureBundle {
             action_state: ActionState {
                 current_action: CreatureAction::None,
             },
-            name: name.clone(),
-            dqn: load_qnetwork_from_file(name.to_string()),
         }
     }
 }
@@ -96,33 +86,4 @@ fn action(
         }
         action_state.current_action = CreatureAction::None;
     }
-}
-
-fn load_qnetwork_from_file(name: String) -> QNetwork {
-    let path = format!("{}.json", name);
-    let file_path = format!("{}/{}", BRAIN_DIR, path);
-    let serialized = fs::read_to_string(file_path).unwrap();
-    serde_json::from_str(&serialized).unwrap()
-}
-
-fn save_periodically(time: Res<Time>, query: Query<(&QNetwork, &Name), With<Creature>>) {
-    debug!("Time: {:?}", time.elapsed_seconds() % 10.0);
-    if time.elapsed_seconds() % 10.0 < 0.009 {
-        debug!("Saving creature states");
-        save_creature_states(query);
-    }
-}
-
-fn save_creature_states(query: Query<(&QNetwork, &Name), With<Creature>>) {
-    for creature in query.iter() {
-        let path = format!("{}.json", creature.1.to_string());
-        fs::create_dir_all(BRAIN_DIR).unwrap();
-        let file_path = format!("{}/{}", BRAIN_DIR, path.as_str());
-        save_qnetwork_to_file(creature.0, &file_path);
-    }
-}
-
-fn save_qnetwork_to_file(q_network: &QNetwork, path: &str) {
-    let serialized = serde_json::to_string(q_network).unwrap();
-    fs::write(path, serialized).unwrap();
 }

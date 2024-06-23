@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use dqn::QNetwork;
+use persistency::{load_qnetwork_from_file, save_periodically};
 use rand::Rng;
 
 use super::entities::{
@@ -9,14 +10,35 @@ use super::entities::{
 };
 
 pub mod dqn;
+mod persistency;
 
 pub struct AIPlugin;
 
 impl Plugin for AIPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, decision);
+        app.add_systems(Startup, load_creature_brains)
+            .add_systems(Update, decision)
+            .add_systems(PostUpdate, save_periodically);
     }
 }
+
+fn load_creature_brains(mut commands: Commands, creature_query: Query<Entity, With<Creature>>) {
+    let dqns = load_qnetwork_from_file();
+
+    if dqns.is_empty() {
+        warn!("No brains found in the brain directory");
+        return;
+    }
+
+    let mut count = 0;
+    for entity in creature_query.iter() {
+        commands.entity(entity).insert(dqns[count].clone());
+        count += 1;
+    }
+}
+// pub dqn: QNetwork,
+// let name = Name::new("1".to_string());
+// dqn: load_qnetwork_from_file(name.to_string()),
 
 const ALPHA: f32 = 0.001;
 const GAMMA: f32 = 0.99;

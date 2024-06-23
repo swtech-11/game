@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
-#[derive(Component, Serialize, Deserialize)]
+#[derive(Component, Serialize, Deserialize, Clone)]
 pub struct QNetwork {
     layers: Vec<Layer>,
     #[serde(skip)] // Skip replay buffer in serialization
