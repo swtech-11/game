@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use bevy_rapier2d::prelude::*;
 use creature_state::CreatureState;
 use dqn::QNetwork;
 use persistency::{load_creature_brains, save_periodically};
@@ -30,16 +29,11 @@ const EPSILON: f32 = 0.1;
 const BATCH_SIZE: usize = 32;
 
 fn decision(
-    mut creature_query: Query<
-        (&mut Transform, &Velocity, &mut QNetwork, &mut ActionState),
-        With<Creature>,
-    >,
+    mut creature_query: Query<(&mut Transform, &mut QNetwork, &mut ActionState), With<Creature>>,
     fruit_query: Query<&Transform, (With<Fruit>, Without<Creature>)>,
 ) {
     let mut rng = rand::thread_rng();
-    for (creature_transform, creature_velocity, mut q_network, mut action_state) in
-        creature_query.iter_mut()
-    {
+    for (creature_transform, mut q_network, mut action_state) in creature_query.iter_mut() {
         // Find the closest fruit
         let mut closest_fruit_position = Vec2::ZERO;
         let mut distance_to_fruit = f32::INFINITY;
