@@ -7,9 +7,9 @@ use super::generic::QNetwork;
 
 const BRAIN_DIR: &str = "brain";
 
-pub struct PersistencyAIPlugin;
+pub struct AIPersistencyPlugin;
 
-impl Plugin for PersistencyAIPlugin {
+impl Plugin for AIPersistencyPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(PostUpdate, save_periodically);
     }
