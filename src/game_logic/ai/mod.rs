@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use creature_state::CreatureState;
-use dqn::QNetwork;
-use persistency::{load_creature_brains, save_periodically};
+use generic::QNetwork;
+use persistency::{load_creature_brains, save_periodically, PersistencyAIPlugin};
 use rand::Rng;
 
 use super::entities::{
@@ -10,14 +10,15 @@ use super::entities::{
 };
 
 mod creature_state;
-pub mod dqn;
+mod generic;
 mod persistency;
 
 pub struct AIPlugin;
 
 impl Plugin for AIPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, load_creature_brains)
+        app.add_plugins(PersistencyAIPlugin)
+            .add_systems(Startup, load_creature_brains)
             .add_systems(Update, decision)
             .add_systems(PostUpdate, save_periodically);
     }

@@ -3,9 +3,17 @@ use std::fs;
 
 use crate::game_logic::entities::creature::Creature;
 
-use super::dqn::QNetwork;
+use super::generic::QNetwork;
 
 const BRAIN_DIR: &str = "brain";
+
+pub struct PersistencyAIPlugin;
+
+impl Plugin for PersistencyAIPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(PostUpdate, save_periodically);
+    }
+}
 
 // For now, this is okayish because is temporary and I don't know how the final creatures will look like
 pub fn load_creature_brains(mut commands: Commands, creature_query: Query<Entity, With<Creature>>) {
