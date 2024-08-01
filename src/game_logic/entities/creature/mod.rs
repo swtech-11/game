@@ -2,31 +2,15 @@ use super::Health;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+mod ai;
+
 pub struct CreaturePlugin;
 
 impl Plugin for CreaturePlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, action);
+        app.add_systems(Update, action)
+            .add_systems(Update, ai::decision);
     }
-}
-
-#[derive(Component, Clone, Debug)]
-pub struct Creature;
-
-#[derive(Component, Debug, Clone)]
-pub struct Nutrition(pub u8);
-
-#[derive(Component, Clone, Debug)]
-pub struct ActionState {
-    pub current_action: CreatureAction,
-}
-
-#[derive(Clone, Debug)]
-pub enum CreatureAction {
-    MoveForward,
-    TurnLeft,
-    TurnRight,
-    None,
 }
 
 #[derive(Bundle)]
@@ -65,6 +49,25 @@ impl Default for CreatureBundle {
             },
         }
     }
+}
+
+#[derive(Component, Clone, Debug)]
+pub struct Creature;
+
+#[derive(Component, Debug, Clone)]
+pub struct Nutrition(pub u8);
+
+#[derive(Component, Clone, Debug)]
+pub struct ActionState {
+    pub current_action: CreatureAction,
+}
+
+#[derive(Clone, Debug)]
+pub enum CreatureAction {
+    MoveForward,
+    TurnLeft,
+    TurnRight,
+    None,
 }
 
 fn action(

@@ -1,17 +1,21 @@
 use bevy::prelude::*;
+use layer::Layer;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
+use std::fmt::Debug;
+
+mod layer;
 
 #[derive(Component, Serialize, Deserialize, Clone, Debug)]
-pub struct QNetwork {
-    layers: Vec<Layer>,
+pub struct QNetwork<L: Layer> {
+    layers: Vec<L>,
     #[serde(skip)] // Skip replay buffer in serialization
     replay_buffer: Vec<(Vec<f32>, usize, f32, Vec<f32>)>,
 }
 
-impl QNetwork {
-    pub fn new(sizes: &[usize]) -> Self {
-        let layers = sizes.windows(2).map(|w| Layer::new(w[0], w[1])).collect();
+impl<L: Layer> QNetwork<L> {
+    pub fn new(layer_sizes: &[usize]) -> Self {
+        let layers = layer_sizes.windows(2).map(|w| L::new(w[0], w[1])).collect();
         Self {
             layers,
             replay_buffer: Vec::new(),
@@ -66,62 +70,5 @@ impl QNetwork {
 
             self.backward(gradients, learning_rate);
         }
-    }
-}
-
-#[derive(Clone, Serialize, Deserialize, Debug)]
-struct Layer {
-    weights: Vec<Vec<f32>>,
-    biases: Vec<f32>,
-    outputs: Vec<f32>,
-    inputs: Vec<f32>,
-    deltas: Vec<f32>,
-}
-
-impl Layer {
-    fn new(input_size: usize, output_size: usize) -> Self {
-        let mut rng = rand::thread_rng();
-        let weights = (0..output_size)
-            .map(|_| {
-                (0..input_size)
-                    .map(|_| rng.gen::<f32>() * 2.0 - 1.0)
-                    .collect()
-            })
-            .collect();
-        let biases = (0..output_size)
-            .map(|_| rng.gen::<f32>() * 2.0 - 1.0)
-            .collect();
-        Self {
-            weights,
-            biases,
-            outputs: vec![0.0; output_size],
-            inputs: vec![0.0; input_size],
-            deltas: vec![0.0; output_size],
-        }
-    }
-
-    fn forward(&mut self, inputs: Vec<f32>) -> Vec<f32> {
-        self.inputs = inputs.clone();
-        for i in 0..self.outputs.len() {
-            self.outputs[i] = self.biases[i];
-            for j in 0..self.inputs.len() {
-                self.outputs[i] += self.inputs[j] * self.weights[i][j];
-            }
-            self.outputs[i] = self.outputs[i].max(0.0); // ReLU activation
-        }
-        self.outputs.clone()
-    }
-
-    fn backward(&mut self, gradients: Vec<f32>, learning_rate: f32) -> Vec<f32> {
-        let mut input_gradients = vec![0.0; self.inputs.len()];
-        for i in 0..self.outputs.len() {
-            self.deltas[i] = gradients[i] * (self.outputs[i] > 0.0) as i32 as f32;
-            for j in 0..self.inputs.len() {
-                input_gradients[j] += self.deltas[i] * self.weights[i][j];
-                self.weights[i][j] -= learning_rate * self.deltas[i] * self.inputs[j];
-            }
-            self.biases[i] -= learning_rate * self.deltas[i];
-        }
-        input_gradients
     }
 }
